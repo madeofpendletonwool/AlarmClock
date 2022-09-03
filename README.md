@@ -43,4 +43,4 @@ python alarm.py
 
 ## Platform Availability
 
-Raspberry Pi and x86 Systems 
+Raspberry Pi (Coming Soon) and x86 Systems 
