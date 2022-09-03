@@ -24,15 +24,14 @@ N/A
 
 ## ToDo
 
- - Start
- - Create Code that can set off Alarms using a time module
- - Allow for saving of alarms after reboot
- - Dockerize (Probably?)
- - Create alarm clock gui
- - arm it. Need it to run on a raspberry pi
- - Voice function to tell actual time
- - Sound function - Allow you to choose music/sound to play
- - import of music from a location of choice 
+ - [x] Create Code that can set off Alarms using a time module
+ - [ ] Allow for saving of alarms after reboot
+ - [ ] Dockerize (Probably?)
+ - [ ] Create alarm clock gui
+ - [ ] arm it. Need it to run on a raspberry pi
+ - [ ] Voice function to tell actual time
+ - [x] Sound function - Allow you to choose music/sound to play
+ - [ ] import of music from a location of choice 
 
 ## Platform Availability
 
