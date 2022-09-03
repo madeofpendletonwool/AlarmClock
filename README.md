@@ -14,13 +14,21 @@
 A quick and dirty python based alarm clock with a GUI and alarm saving functionality
 
 ## Features
-N/A
+Basic Alarm funtionality with a GUI currently implemented. Run with Python.
 
 ## Hosting
 N/A
 
 ## Installing/Running
-N/A
+Reqired dependancies: 
+- PySimpleGUI
+- playsound
+Install and run with
+
+```
+pip install pysimplegui playsound
+python alarm.py
+```
 
 ## ToDo
 
