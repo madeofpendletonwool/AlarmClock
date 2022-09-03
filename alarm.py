@@ -30,14 +30,14 @@ sg.theme('DarkAmber')   # Add a touch of color
 layout = [  [sg.Text('When Would you like to wake up?')],
             [sg.Text('Select Time:')],
             [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period)],
-            [sg.Button('Ok'), sg.Button('Cancel')] ]
+            [sg.Button('Ok')] ]
 
 # Create the Window
 window = sg.Window('Window Title', layout)
 # Event Loop to process "events" and get the "values" of the inputs
 while True:
     event, values = window.read()
-    if event == sg.WIN_CLOSED or event == 'Cancel': # if user closes window or clicks cancel
+    if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
         break
 
 
