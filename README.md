@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="300" height="300" src="./images/Alarm_Clock.png">
+  <img width="340" height="300" src="./images/Alarm_Clock.png">
 </p>
 
 # AlarmClock
