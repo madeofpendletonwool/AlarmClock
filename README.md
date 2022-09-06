@@ -26,7 +26,7 @@ Reqired dependancies:
 Install and run with
 
 ```
-pip install pysimplegui playsound
+pip install pysimplegui playsound pyyaml
 python alarm.py
 ```
 
