@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import time
 import datetime
 import PySimpleGUI as sg
@@ -7,6 +9,12 @@ import pyglet
 Time_Period = ("AM", "PM")
 Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 Min = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60)
+
+def play():
+    player.play()
+
+def pause():
+    player.pause()
 
 def alarm(set_alarm_timer):
     while True:
@@ -21,41 +29,37 @@ def alarm(set_alarm_timer):
             Wake_Up()
             break
 def actual_time():
-    set_alarm_timer = f"{hour_conv}:{min_conv}:{sec_conv}"
+    set_alarm_timer = f"{hour_convfin}:{min_conv}:{sec_conv}"
+    print(set_alarm_timer)
     Time_Period
     alarm(set_alarm_timer)
 
 def Wake_Up():
-    sg.theme('DarkAmber')   # Add a touch of color
-    # All the stuff inside your window.
-    layout = [  [sg.Text('Wake Up!')],
-                [sg.Button('Ok'), sg.Button('Snooze')] ]
-
-    # Create the Window
-    window = sg.Window('Window Title', layout)
-    # Event Loop to process "events" and get the "values" of the inputs
     while True:
-        event, values = window.read()
-        player = pyglet.media.Player()
-        song = "/home/collinp/Music/DancingQueen.mp3"
-        src = pyglet.media.load(song)
-        player.queue(src)
-
         play()
 
-        while True:
-            if event == 'Snooze': # if user Clicks Snooze
-                pause()
-                time.sleep(600)
-                play()
-            else: # Otherwise break loop
-                break
+        sg.theme('DarkAmber')   # Add a touch of color
+        # All the stuff inside your window.
+        layout = [  [sg.Text('Wake up!')],
+                    [sg.Button('Ok'), sg.Button('Snooze')]             
+                ]
+            
+        window = sg.Window('pyArmClock', layout)
 
-def play():
-    player.play()
+        event, values = window.read()
 
-def pause():
-    player.pause()
+        if event == sg.WIN_CLOSED or event == 'Snooze': # if user closes window or clicks cancel
+            window.close()
+            pause()
+            time.sleep(5)
+        else: break
+
+#Pyglet Music Setup
+player = pyglet.media.Player()
+song = "/home/collinp/Music/DancingQueen.mp3"
+src = pyglet.media.load(song)
+player.queue(src)
+
 
 
 sg.theme('DarkAmber')   # Add a touch of color
@@ -110,10 +114,10 @@ if min_time < 10:
     min_conv = "0" + min_strconv
 else: min_conv = str(min_time)
 
-if hour_time < 10:
-    hour_strconv = str(hour_time)
-    hour_conv = "0" + hour_strconv
-else: hour_conv = str(hour_time)
+if hour_conv < 10:
+    hour_strconv = str(hour_conv)
+    hour_convfin = "0" + hour_strconv
+else: hour_convfin = str(hour_conv)
 
 print(f"Got it! I'll wake you up at {hour_temp}:{min_conv} {time_section}")
 
