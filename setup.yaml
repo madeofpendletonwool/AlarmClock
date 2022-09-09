@@ -1,1 +1,119 @@
- 
+- name: Setup Alarm Clock on Raspberry Pi
+  hosts: localhost
+  user: pi
+  become: yes
+  vars_files:
+    - vars.yml
+
+
+  tasks:
+
+  - name: "Update cache & Full system update"
+    apt:
+      update_cache: true
+      upgrade: dist
+      cache_valid_time: 3600
+      force_apt_get: true
+
+  - name: Install docker
+    ansible.builtin.apt:
+      name: docker.io
+      update_cache: yes
+
+  - name: Install docker-compose
+    ansible.builtin.apt:
+      name: docker-compose
+
+  - name: Instal python3 if not already installed
+    ansible.builtin.apt:
+      name: realmd
+
+  - name: Install pip
+      ansible.builtin.apt:
+      name: pip3
+  
+  - name: Update repositories cache and install libpam-sss
+    ansible.builtin.apt:
+      name: libpam-sss
+
+  - name: Update repositories cache and install sssd
+    ansible.builtin.apt:
+      name: sssd
+
+  - name: Update repositories cache and install sssd-tools
+    ansible.builtin.apt:
+      name: sssd-tools
+
+  - name: Update repositories cache and install adcli
+    ansible.builtin.apt:
+      name: adcli
+
+  - name: Update repositories cache and install samba-common-bin
+    ansible.builtin.apt:
+      name: samba-common-bin
+
+  - name: Update repositories cache and install oddjob
+    ansible.builtin.apt:
+      name: oddjob
+
+  - name: Update repositories cache and install oddjob-mkhomedir
+    ansible.builtin.apt:
+      name: oddjob-mkhomedir
+
+  - name: Update repositories cache and install packagekit
+    ansible.builtin.apt:
+      name: packagekit
+
+  - name: Update repositories cache and install ufw firewall
+    ansible.builtin.apt:
+      name: ufw
+
+  - name: pull the lynxx-agent image
+    docker_image:
+      name: madeofpendletonwool/lynxx-agent:latest
+
+  - name: Create the Postfix Container for Email
+    docker_container:
+      name: postfix
+      image: juanluisbaptiste/postfix
+      env:
+        SMTP_SERVER: smtp.office365.com
+        SMTP_USERNAME: brobot@3rtnetworks.com
+        SMTP_PASSWORD: '{{ BROBOTPW }}'
+        SMTP_HOSTNAME: brobot.3rtnetworks.com
+
+  - name: Use sed to edit docker sysd unit
+    shell: sed '/ExecStart/c ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock ' /lib/systemd/system/docker.service > sedout
+
+  - name: Copy the file back to the docker sysd unit location
+    shell: cp sedout /lib/systemd/system/docker.service
+
+  - name: Reload Docker Service
+    shell: systemctl daemon-reload
+
+  - name: Restart Docker Service
+    shell: service docker restart
+  
+  - name: Setup ssh rule for ufw
+    shell: ufw allow ssh
+
+  - name: Setup openssh rule for ufw
+    shell: ufw allow OpenSSH
+
+  - name: Setup docker node rules for ufw
+    shell: ufw allow 20001:20005/tcp
+
+  - name: Setup docker node Jenkins Connection Port ufw
+    shell: ufw allow 2375/tcp
+
+  - name: Enable UFW
+    ufw:
+      state: enabled
+
+  - name: Name Machine based on Domain and add proper domain suffix
+    ansible.builtin.shell: hostnamectl set-hostname {{ FULLHOSTNAME }}
+
+  - name: Join Domain
+    ansible.builtin.shell: echo {{ ADPASS }} | sudo realm join -U {{ ADJOINACCOUNT }} {{ DOMAINNAME }}
+
+    
