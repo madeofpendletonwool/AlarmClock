@@ -24,96 +24,51 @@
     ansible.builtin.apt:
       name: docker-compose
 
-  - name: Instal python3 if not already installed
+  - name: Install python3 if not already installed
     ansible.builtin.apt:
-      name: realmd
+      name: python3
 
   - name: Install pip
-      ansible.builtin.apt:
+    ansible.builtin.apt:
       name: pip3
   
-  - name: Update repositories cache and install libpam-sss
-    ansible.builtin.apt:
-      name: libpam-sss
+  - name: Install Alarm dependancies - pysimplegui
+    ansible.builtin.pip:
+      name: pysimplegui
 
-  - name: Update repositories cache and install sssd
-    ansible.builtin.apt:
-      name: sssd
+  - name: Install Alarm dependancies - tkinter
+    ansible.builtin.pip:
+      name: tkinter
 
-  - name: Update repositories cache and install sssd-tools
-    ansible.builtin.apt:
-      name: sssd-tools
+  - name: Install Alarm dependancies - pyglet
+    ansible.builtin.pip:
+      name: pyglet
 
-  - name: Update repositories cache and install adcli
-    ansible.builtin.apt:
+  - name: Install Alarm dependancies - tkinter
+    ansible.builtin.pip:
       name: adcli
 
-  - name: Update repositories cache and install samba-common-bin
+  - name: Install Alarm dependancies - pyyaml
+    ansible.builtin.pip:
+      name: pyyaml
+
+  - name: Install apt tkinter
     ansible.builtin.apt:
-      name: samba-common-bin
+      name: python3.8-tk
 
-  - name: Update repositories cache and install oddjob
-    ansible.builtin.apt:
-      name: oddjob
-
-  - name: Update repositories cache and install oddjob-mkhomedir
-    ansible.builtin.apt:
-      name: oddjob-mkhomedir
-
-  - name: Update repositories cache and install packagekit
-    ansible.builtin.apt:
-      name: packagekit
-
-  - name: Update repositories cache and install ufw firewall
-    ansible.builtin.apt:
-      name: ufw
-
-  - name: pull the lynxx-agent image
-    docker_image:
-      name: madeofpendletonwool/lynxx-agent:latest
-
-  - name: Create the Postfix Container for Email
-    docker_container:
-      name: postfix
-      image: juanluisbaptiste/postfix
-      env:
-        SMTP_SERVER: smtp.office365.com
-        SMTP_USERNAME: brobot@3rtnetworks.com
-        SMTP_PASSWORD: '{{ BROBOTPW }}'
-        SMTP_HOSTNAME: brobot.3rtnetworks.com
-
-  - name: Use sed to edit docker sysd unit
-    shell: sed '/ExecStart/c ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock ' /lib/systemd/system/docker.service > sedout
-
-  - name: Copy the file back to the docker sysd unit location
-    shell: cp sedout /lib/systemd/system/docker.service
-
-  - name: Reload Docker Service
-    shell: systemctl daemon-reload
-
-  - name: Restart Docker Service
-    shell: service docker restart
-  
-  - name: Setup ssh rule for ufw
-    shell: ufw allow ssh
-
-  - name: Setup openssh rule for ufw
-    shell: ufw allow OpenSSH
-
-  - name: Setup docker node rules for ufw
-    shell: ufw allow 20001:20005/tcp
-
-  - name: Setup docker node Jenkins Connection Port ufw
-    shell: ufw allow 2375/tcp
-
-  - name: Enable UFW
-    ufw:
-      state: enabled
-
-  - name: Name Machine based on Domain and add proper domain suffix
-    ansible.builtin.shell: hostnamectl set-hostname {{ FULLHOSTNAME }}
-
-  - name: Join Domain
-    ansible.builtin.shell: echo {{ ADPASS }} | sudo realm join -U {{ ADJOINACCOUNT }} {{ DOMAINNAME }}
-
+  - name: Clone a repo with separate git directory
+    ansible.builtin.git:
+      repo: https://github.com/waveshare/LCD-show.git
+      dest: /home/pi
     
+  - name: Change file ownership, group and permissions
+    ansible.builtin.file:
+      path: /home/pi/LCD-show/LCD35-show
+      mode: '0777'
+
+  - name: Install screen drivers
+    ansible.builtin.shell: LCD35-show
+    args:
+      chdir: /home/pi/LCD-show
+
+# Next - Setup python script to start by default
