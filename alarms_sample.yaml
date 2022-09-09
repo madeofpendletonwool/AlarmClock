@@ -1,10 +1,10 @@
 ---
-  Walk_Dog:
-      Time: '08:15:25'
-      Sound: /home/collinp/Music/DancingQueen.mp3
-  Wake_Up:
-      Time: '21:07:25'
-      Sound: /home/collinp/Music/DancingQueen.mp3
-  Do_Different Task:
-      Time: '15:07:25'
-      Sound: /home/collinp/Music/DancingQueen.mp3
+Walk_Dog:
+  - Time: '08:15:25'
+  - Sound: /home/collinp/Music/DancingQueen.mp3
+Wake_Up:
+  - Time: '21:07:25'
+  - Sound: /home/collinp/Music/DancingQueen.mp3
+Do_Different Task:
+  - Time: '15:07:25'
+  - Sound: /home/collinp/Music/DancingQueen.mp3
