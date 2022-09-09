@@ -33,6 +33,9 @@ python alarm.py
 ## ToDo
 
  - [x] Create Code that can set off Alarms using a time module
+ - [x] Snooze funtionality
+ - [ ] Deploy via ansible and fully setup using raspberry pie
+ - [ ] Easy setup with package management
  - [ ] Allow for saving of alarms after reboot
  - [ ] Dockerize (Probably?)
  - [ ] Create alarm clock gui
