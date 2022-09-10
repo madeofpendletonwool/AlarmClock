@@ -83,3 +83,8 @@
       name: "Boot Python Alarm Clock"
       special_time: reboot
       job: "/home/pi/AlarmClock/alarm.py"
+
+# Reboot after updating and to start up the script
+
+- name: Unconditionally reboot the machine with all defaults
+  ansible.builtin.reboot:
