@@ -53,16 +53,13 @@
     ansible.builtin.git:
       repo: https://github.com/waveshare/LCD-show.git
       dest: /home/pi/LCD-show
+      clone: yes
+      update: yes
     
   - name: Change file ownership, group and permissions
     ansible.builtin.file:
       path: /home/pi/LCD-show/LCD35-show
       mode: '0777'
-
-  - name: Install screen drivers
-    ansible.builtin.shell: ./LCD35-show
-    args:
-      chdir: /home/pi/LCD-show
 
 # Next - Setup python script to start by default
 
@@ -70,6 +67,8 @@
     ansible.builtin.git:
       repo: https://github.com/madeofpendletonwool/AlarmClock.git
       dest: /home/pi/AlarmClockBoot
+      clone: yes
+      update: yes
 
   - name: Start Alarm Clock at Boot
     ansible.builtin.cron:
@@ -81,3 +80,10 @@
 
   - name: Unconditionally reboot the machine with all defaults
     ansible.builtin.reboot:
+
+#Last, install driver for screen. This will kill the connection so it needs to be done last. 
+
+  - name: Install screen drivers
+    ansible.builtin.shell: ./LCD35-show
+    args:
+      chdir: /home/pi/LCD-show
