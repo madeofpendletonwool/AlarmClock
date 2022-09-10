@@ -69,13 +69,13 @@
   - name: Pull Alarm Clock files and verify they are in the home dir for user pi
     ansible.builtin.git:
       repo: https://github.com/madeofpendletonwool/AlarmClock.git
-      dest: /home/pi
+      dest: /home/pi/AlarmClockBoot
 
   - name: Start Alarm Clock at Boot
     ansible.builtin.cron:
       name: "Boot Python Alarm Clock"
       special_time: reboot
-      job: "/home/pi/AlarmClock/alarm.py"
+      job: "/home/pi/AlarmClockBoot/alarm.py"
 
 # Reboot after updating and to start up the script
 
