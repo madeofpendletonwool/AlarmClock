@@ -26,7 +26,6 @@ I recommend the automated install
 
 #### **Automated Install:**
 
-First Install Ansible
 
 Update!
 ```
