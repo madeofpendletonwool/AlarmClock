@@ -17,7 +17,7 @@ A quick and dirty python based alarm clock with a GUI and alarm saving functiona
 Basic Alarm funtionality with a GUI currently implemented. Run with Python.
 
 ## Hosting
-N/A
+WIP
 
 ## Installing/Running
 
@@ -52,23 +52,16 @@ ansible-playbook setup.yaml
 
 *Seriously I don't recommend this. It's kinda awful with all the commands needed*
 
-Reqired dependancies: 
-- PySimpleGUI
-- playsound
-Install and run with
-
-```
-pip install pysimplegui pyglet pyyaml
-python alarm.py
-```
+*Instructions for this method a work in progress*
 
 ## ToDo
 
  - [x] Create Code that can set off Alarms using a time module
  - [x] Snooze funtionality
- - [ ] Deploy via ansible and fully setup using raspberry pi
+ - [x] Deploy via ansible and fully setup using raspberry pi
  - [ ] Easy setup with package management
  - [ ] Allow for saving of alarms after reboot
+ - [ ] Display a big clock on the screen at all times
  - [ ] Dockerize (Probably?)
  - [ ] Create alarm clock gui
  - [ ] arm it. Need it to run on a raspberry pi
