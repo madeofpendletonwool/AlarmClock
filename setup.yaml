@@ -27,7 +27,7 @@
 
   - name: Install pip
     ansible.builtin.apt:
-      name: pip3
+      name: pip
   
   - name: Install Alarm dependancies - pysimplegui
     ansible.builtin.pip:
