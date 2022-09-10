@@ -2,9 +2,6 @@
   hosts: localhost
   user: pi
   become: yes
-  vars_files:
-    - vars.yml
-
 
   tasks:
 
