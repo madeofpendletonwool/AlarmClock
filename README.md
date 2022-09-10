@@ -2,9 +2,9 @@
   <img width="340" height="300" src="./images/Alarm_Clock.png">
 </p>
 
-# AlarmClock
+# pyArmClock
 
-- [AlarmClock](#AlarmClock)
+- [pyArmClock](#AlarmClock)
   - [Features](#Features)
   - [Hosting](#Hosting)
   - [Installing/Running](#Installing/Running)
@@ -65,10 +65,10 @@ ansible-playbook setup.yaml
  - [ ] Allow for saving of alarms after reboot
  - [ ] Display a big clock on the screen at all times
  - [ ] Dockerize (Probably?)
- - [ ] Create alarm clock gui
+ - [x] Create alarm clock gui
  - [ ] arm it. Need it to run on a raspberry pi
  - [ ] Voice function to tell actual time
- - [x] Sound function - 
+ - [x] Sound function
  - [x] Allow you to choose music/sound to play
  - [x] import of music from a location of choice 
 
