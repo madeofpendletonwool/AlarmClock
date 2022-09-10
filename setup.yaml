@@ -86,5 +86,5 @@
 
 # Reboot after updating and to start up the script
 
-- name: Unconditionally reboot the machine with all defaults
-  ansible.builtin.reboot:
+  - name: Unconditionally reboot the machine with all defaults
+    ansible.builtin.reboot:
