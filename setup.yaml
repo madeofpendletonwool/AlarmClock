@@ -47,7 +47,7 @@
 
   - name: Install apt tkinter
     ansible.builtin.apt:
-      name: python3.8-tk
+      name: python-tk
 
   - name: Clone a repo with separate git directory
     ansible.builtin.git:
