@@ -35,15 +35,11 @@
 
   - name: Install Alarm dependancies - tkinter
     ansible.builtin.pip:
-      name: tkinter
+      name: tk
 
   - name: Install Alarm dependancies - pyglet
     ansible.builtin.pip:
       name: pyglet
-
-  - name: Install Alarm dependancies - tkinter
-    ansible.builtin.pip:
-      name: adcli
 
   - name: Install Alarm dependancies - pyyaml
     ansible.builtin.pip:
