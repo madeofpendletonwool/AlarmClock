@@ -17,14 +17,14 @@ A quick and dirty python based alarm clock with a GUI and alarm saving functiona
 Basic Alarm funtionality with a GUI currently implemented. Run with Python.
 
 ## Hosting
-WIP
+
 
 ## Installing/Running
 
 #### There's two options for install - Manual and Automated with Ansible
 I recommend the automated install
 
-#### **Automated Install:**
+#### **Raspberry Pi Automated Install:**
 
 
 Update!
@@ -48,6 +48,8 @@ Lastly, run the playbook to set everything up
 ansible-playbook setup.yaml
 ```
 
+#### **:**
+
 #### **Manual Install:**
 
 *Seriously I don't recommend this. It's kinda awful with all the commands needed*
@@ -67,9 +69,9 @@ ansible-playbook setup.yaml
  - [ ] arm it. Need it to run on a raspberry pi
  - [ ] Voice function to tell actual time
  - [x] Sound function - 
- - [ ] Allow you to choose music/sound to play
- - [ ] import of music from a location of choice 
+ - [x] Allow you to choose music/sound to play
+ - [x] import of music from a location of choice 
 
 ## Platform Availability
 
-Raspberry Pi (Coming Soon) and x86 Systems 
+Raspberry Pi and x86 Systems 

@@ -54,21 +54,13 @@ def Wake_Up():
             time.sleep(5)
         else: break
 
-#Pyglet Music Setup
-player = pyglet.media.Player()
-song = "/home/collinp/Music/DancingQueen.mp3"
-src = pyglet.media.load(song)
-player.queue(src)
-
-
-
 sg.theme('DarkAmber')   # Add a touch of color
 # All the stuff inside your window.
 layout = [  [sg.Text('When Would you like to wake up?')],
             [sg.Text('Select Time:')],
             [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period)],
             [sg.Button('Ok')],
-            [sg.Button('Choose Song'), sg.Button('Choose Alarm')]
+            [sg.Button('Choose Song'), sg.FileBrowse('Choose Alarm', file_types=(("MP3 files", "*.mp3"),))]
              
         ]
 
@@ -78,7 +70,7 @@ window = sg.Window('pyArmClock', layout)
 while True:
     event, values = window.read()
     # Check if alarm values were populated
-    if values[0] or values[1] or values[2] == '':
+    if values == {}:
         sg.theme('DarkAmber')   # Add a touch of color
         # All the stuff inside your window.
         layout = [  [sg.Text('ALARM TIME REQUIRED!!')],
@@ -93,12 +85,14 @@ while True:
             window.close()
     #End Alarm Values check
     if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
+        window.close()
         break
 
-
-
-
-window.close()
+#Pyglet Music Setup
+player = pyglet.media.Player()
+song = values['Choose Alarm']
+src = pyglet.media.load(song)
+player.queue(src)
 
 hour_temp = values[0]
 hour_time = values[0]
