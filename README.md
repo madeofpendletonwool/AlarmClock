@@ -47,8 +47,38 @@ Lastly, run the playbook to set everything up
 ```
 ansible-playbook setup.yaml
 ```
+Reboot!
+```
+sudo reboot 0
+```
 
-#### **:**
+#### **x86 Computer Install:**
+The intention here is that you can install the alarm clock on anything, regardless of platform or architechture. I may add more options down the road as well for CPU architecture. The instructure are almost the same as with raspberry pi. Just a different playbook. 
+
+Also note that while I tried to make this agnostic of distro, package names vary, and you may need to install some packages manaully/change the playbook. Some basic ansible knowledge might be helpful. 
+
+First, Install ansible - I assume you can handle this based on your distro package management.
+
+Now, pull the Git repo
+```
+git clone https://github.com/madeofpendletonwool/pyArmClock.git
+```
+cd into the pulled folder
+```
+cd pyArmClock/
+```
+Use your editor of choice to open vars.yml and edit the user to reflect yourself.
+```
+user_name: your_user_name
+```
+Lastly, run the playbook to set everything up
+```
+ansible-playbook x86setup.yaml
+```
+Reboot!
+```
+sudo reboot 0
+```
 
 #### **Manual Install:**
 
