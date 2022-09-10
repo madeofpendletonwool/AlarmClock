@@ -5,10 +5,16 @@ import datetime
 import PySimpleGUI as sg
 import yaml
 import pyglet
+import tkinter.font
 
 Time_Period = ("AM", "PM")
 Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 Min = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60)
+
+def now():
+    ntime=datetime.now()
+    nt=ntime.strftime('%H:%M:%S')
+    return nt
 
 def play():
     player.play()
@@ -54,43 +60,52 @@ def Wake_Up():
             time.sleep(5)
         else: break
 
-sg.theme('DarkAmber')   # Add a touch of color
-# All the stuff inside your window.
-layout = [  [sg.Text('When Would you like to wake up?')],
-            [sg.Text('Select Time:')],
-            [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period)],
-            [sg.Button('Ok')],
-            [sg.Button('Choose Song'), sg.FileBrowse('Choose Alarm', file_types=(("MP3 files", "*.mp3"),))]
-             
-        ]
-
-# Create the Window
-window = sg.Window('pyArmClock', layout)
-# Event Loop to process "events" and get the "values" of the inputs
-while True:
-    event, values = window.read()
-    # Check if alarm values were populated
-    if values == {}:
-        sg.theme('DarkAmber')   # Add a touch of color
-        # All the stuff inside your window.
-        layout = [  [sg.Text('ALARM TIME REQUIRED!!')],
-                    [sg.Button('Ok')]
-                    
-                ]
-
+def make_window(theme,cfont):
+    sg.theme(theme)   # Add a touch of color
+    # All the stuff inside your window.
+    layout = [  [sg.Text('',key='-time-',font=(cfont,40),justification='center')],
+                [sg.Text('When Would you like to wake up?')],
+                [sg.Text('Select Time:')],
+                [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period)],
+                [sg.Button('Ok')],
+                [sg.Button('Choose Alarm'), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3"),))]
+                
+            ]
         # Create the Window
-        window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read()
+        # Check if alarm values were populated
+        if values == {}:
+            sg.theme('DarkAmber')   # Add a touch of color
+            # All the stuff inside your window.
+            layout = [  [sg.Text('ALARM TIME REQUIRED!!')],
+                        [sg.Button('Ok')]
+                        
+                    ]
+
+            # Create the Window
+            window = sg.Window('pyArmClock', layout)
+            if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
+                break
+                window.close()
+        #End Alarm Values check
         if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
-            break
             window.close()
-    #End Alarm Values check
-    if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
-        window.close()
-        break
+            break
+
+def main():
+    #preset font and theme
+    cfont='Times New Roman'
+    theme='DarkBrown'
+    wnd=make_window(theme,cfont)
+
+main()
 
 #Pyglet Music Setup
 player = pyglet.media.Player()
-song = values['Choose Alarm']
+song = values['Choose Song']
 src = pyglet.media.load(song)
 player.queue(src)
 
@@ -99,6 +114,7 @@ hour_time = values[0]
 min_time = values[1]
 time_section = values[2]
 
+# Conversions to make time work 
 if time_section == "PM":
     hour_conv = hour_time + 12
 else: hour_conv = hour_time
