@@ -73,7 +73,7 @@
 
 # Next - Setup python script to start by default
 
-  - name: Pull Alarm Clock files
+  - name: Pull Alarm Clock files and verify they are in the home dir for user pi
     ansible.builtin.git:
       repo: https://github.com/madeofpendletonwool/AlarmClock.git
       dest: /home/pi

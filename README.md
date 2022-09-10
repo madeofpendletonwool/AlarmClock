@@ -20,6 +20,23 @@ Basic Alarm funtionality with a GUI currently implemented. Run with Python.
 N/A
 
 ## Installing/Running
+
+#### There's two options for install - Manual and Automated with Ansible
+I recommend the automated install
+
+- **Automated Install**
+
+First Install Ansible
+
+```
+sudo apt install ansible
+```
+
+Now, pull the setup playbook
+
+
+- ** Manual Install**
+
 Reqired dependancies: 
 - PySimpleGUI
 - playsound
@@ -34,14 +51,15 @@ python alarm.py
 
  - [x] Create Code that can set off Alarms using a time module
  - [x] Snooze funtionality
- - [ ] Deploy via ansible and fully setup using raspberry pie
+ - [ ] Deploy via ansible and fully setup using raspberry pi
  - [ ] Easy setup with package management
  - [ ] Allow for saving of alarms after reboot
  - [ ] Dockerize (Probably?)
  - [ ] Create alarm clock gui
  - [ ] arm it. Need it to run on a raspberry pi
  - [ ] Voice function to tell actual time
- - [x] Sound function - Allow you to choose music/sound to play
+ - [x] Sound function - 
+ - [ ] Allow you to choose music/sound to play
  - [ ] import of music from a location of choice 
 
 ## Platform Availability
