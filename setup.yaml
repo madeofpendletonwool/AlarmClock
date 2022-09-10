@@ -52,7 +52,7 @@
   - name: Clone a repo with separate git directory
     ansible.builtin.git:
       repo: https://github.com/waveshare/LCD-show.git
-      dest: /home/pi
+      dest: /home/pi/LCD-show
     
   - name: Change file ownership, group and permissions
     ansible.builtin.file:
