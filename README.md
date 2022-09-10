@@ -37,11 +37,11 @@ sudo apt install ansible
 ```
 Now, pull the Git repo
 ```
-git clone https://github.com/madeofpendletonwool/AlarmClock.git
+git clone https://github.com/madeofpendletonwool/pyArmClock.git
 ```
 cd into the pulled folder
 ```
-cd AlarmClock/
+cd pyArmClock/
 ```
 Lastly, run the playbook to set everything up
 ```
