@@ -2,11 +2,11 @@
 
 ## Supported Versions
 
-With the 
+With the newness of this project I am currently supporting all versions. As features continue to be added I will update and change supported versions. 
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.0     | :white_check_mark:   |
+| Version  | Supported          |
+| -------  | ------------------ |
+| beta 1.0 | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
