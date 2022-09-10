@@ -72,3 +72,14 @@
       chdir: /home/pi/LCD-show
 
 # Next - Setup python script to start by default
+
+  - name: Pull Alarm Clock files
+    ansible.builtin.git:
+      repo: https://github.com/madeofpendletonwool/AlarmClock.git
+      dest: /home/pi
+
+  - name: Start Alarm Clock at Boot
+    ansible.builtin.cron:
+      name: "Boot Python Alarm Clock"
+      special_time: reboot
+      job: "/home/pi/AlarmClock/alarm.py"
