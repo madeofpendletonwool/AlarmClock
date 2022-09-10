@@ -60,7 +60,7 @@
       mode: '0777'
 
   - name: Install screen drivers
-    ansible.builtin.shell: LCD35-show
+    ansible.builtin.shell: ./LCD35-show
     args:
       chdir: /home/pi/LCD-show
 
