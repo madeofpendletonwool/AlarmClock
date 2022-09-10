@@ -24,7 +24,7 @@ N/A
 #### There's two options for install - Manual and Automated with Ansible
 I recommend the automated install
 
-- **Automated Install**
+#### **Automated Install:**
 
 First Install Ansible
 
@@ -47,12 +47,9 @@ cd AlarmClock/
 Lastly, run the playbook to set everything up
 ```
 ansible-playbook setup.yaml
+```
 
-
-
-
-
-- ** Manual Install**
+#### **Manual Install:**
 
 Reqired dependancies: 
 - PySimpleGUI
