@@ -7,14 +7,18 @@
 - [pyArmClock](#AlarmClock)
   - [Features](#Features)
   - [Hosting](#Hosting)
-  - [Installing/Running](#Installing/Running)
+  - [Installing/Running](#Installing)
   - [ToDo](#ToDo)
   - [Platform Availability](#Platform-Availability)
       
-A quick and dirty python based alarm clock with a GUI and alarm saving functionality
+A quick and dirty python based alarm clock with a GUI and alarm saving functionality. Allows for choosing of song/audio that you wake up to and can speak the time before playing the audio. Works great on a raspberry pi as well as other linux based OS's with automated setup using ansible.
 
 ## Features
-Basic Alarm funtionality with a GUI currently implemented. Run with Python.
+- Alarm Functionality
+- Song Choice
+- Setup Automation
+- 10 Min Snooze (Custom Snooze Duration Coming Soon)
+- Nice GUI (Custom Themes will be implemented in future)
 
 ## Hosting
 
@@ -90,12 +94,14 @@ sudo reboot 0
 
  - [x] Create Code that can set off Alarms using a time module
  - [x] Snooze funtionality
+ - [ ] Custom Snooze Duration
  - [x] Deploy via ansible and fully setup using raspberry pi
  - [ ] Easy setup with package management
  - [ ] Allow for saving of alarms after reboot
  - [ ] Display a big clock on the screen at all times
  - [ ] Dockerize (Probably?)
  - [x] Create alarm clock gui
+ - [ ] Custom GUI Themes
  - [ ] arm it. Need it to run on a raspberry pi
  - [ ] Voice function to tell actual time
  - [x] Sound function
