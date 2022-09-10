@@ -76,11 +76,6 @@
       special_time: reboot
       job: "/home/pi/pyArmClock/alarm.py"
 
-# Reboot after updating and to start up the script
-
-  - name: Unconditionally reboot the machine with all defaults
-    ansible.builtin.reboot:
-
 #Last, install driver for screen. This will kill the connection so it needs to be done last. 
 
   - name: Install screen drivers
