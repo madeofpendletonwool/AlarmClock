@@ -28,11 +28,28 @@ I recommend the automated install
 
 First Install Ansible
 
+Update!
+```
+sudo apt update
+```
+Install Ansible
 ```
 sudo apt install ansible
 ```
+Now, pull the Git repo
+```
+git clone https://github.com/madeofpendletonwool/AlarmClock.git
+```
+cd into the pulled folder
+```
+cd AlarmClock/
+```
+Lastly, run the playbook to set everything up
+```
+ansible-playbook setup.yaml
 
-Now, pull the setup playbook
+
+
 
 
 - ** Manual Install**
