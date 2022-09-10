@@ -50,6 +50,8 @@ ansible-playbook setup.yaml
 
 #### **Manual Install:**
 
+*Seriously I don't recommend this. It's kinda awful with all the commands needed*
+
 Reqired dependancies: 
 - PySimpleGUI
 - playsound
