@@ -94,7 +94,7 @@ sudo reboot 0
 ## ToDo
 
  - [x] Create Code that can set off Alarms using a time module
- - [x] Snooze funtionality
+ - [x] Snooze functionality
  - [ ] Custom Snooze Duration
  - [x] Deploy via ansible and fully setup using raspberry pi
  - [ ] Easy setup with package management
@@ -108,6 +108,8 @@ sudo reboot 0
  - [x] Sound function
  - [x] Allow you to choose music/sound to play
  - [x] import of music from a location of choice 
+ - [ ] Support for music files other than mp3's
+ - [ ] Custom Pi image that can be deployed using an img file
 
 ## Platform Availability
 
