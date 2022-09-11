@@ -6,6 +6,7 @@ import PySimpleGUI as sg
 import yaml
 import pyglet
 import tkinter.font
+import os
 
 Time_Period = ("AM", "PM")
 Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
@@ -112,8 +113,10 @@ def reverse_time_conversion(alarm_convert):
 def alarm_select(theme):
         while True:
             sg.theme(theme)   # Add a touch of color
+            #get home folder
+            home_folder = os.path.expanduser('~')
             # Call in alarms file
-            with open('/home/collinp/Documents/GitHub/pyArmClock/alarms_sample.yaml') as f:
+            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml') as f:
                 alarms = yaml.load(f, Loader=yaml.FullLoader)
 
             # Time Conversion
@@ -126,10 +129,10 @@ def alarm_select(theme):
                             [sg.Button(f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm1"][0]["Alarm_Name"]}?')],
                             [sg.Text('Alarm 2:')],
                             [sg.Text(alarms['Alarm2'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc2)],
-                            [sg.Button(f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm2"][0]["Alarm_Name"]}?')],
+                            [sg.Button(f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm2"][0]["Alarm_Name"]}?')],
                             [sg.Text('Alarm 3:')],
                             [sg.Text(alarms['Alarm3'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc3)],
-                            [sg.Button(f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm3"][0]["Alarm_Name"]}?')],
+                            [sg.Button(f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm3"][0]["Alarm_Name"]}?')],
                             [sg.Button('Ok')]               
                         ]
                     
@@ -140,6 +143,20 @@ def alarm_select(theme):
                 if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
                     window.close()
                     break
+
+                if event == f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?':
+                    edit_alarm_no = "Alarm1"
+                    window.close()
+                    edit_alarm(edit_alarm_no, theme)
+                elif event == f'Edit {alarms["Alarm2"][0]["Alarm_Name"]}?':
+                    edit_alarm_no = "Alarm2"
+                    window.close()
+                    edit_alarm(edit_alarm_no, theme)
+                elif event == f'Edit {alarms["Alarm3"][0]["Alarm_Name"]}?':
+                    edit_alarm_no = "Alarm3"
+                    window.close()
+                    edit_alarm(edit_alarm_no, theme)
+
 
                 if event == f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?':
                     window.close()
@@ -153,6 +170,85 @@ def alarm_select(theme):
                     window.close()
                     alarm(alarms['Alarm3'][1]['Time'])
                     break
+
+def edit_alarm(edit_alarm_no, theme):
+
+    edit_Time_Period = ("AM", "PM")
+    edit_Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+    edit_Min = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60)
+
+    sg.theme(theme)   # Add a touch of color
+    #get home folder
+    home_folder = os.path.expanduser('~')
+    # All the stuff inside your window.
+    layout = [
+                [sg.Text('New Alarm Name:')],
+                [sg.InputText()],
+                [sg.Text('Alarm Time')],
+                [sg.Combo(edit_Hour), sg.Combo(edit_Min), sg.Combo(edit_Time_Period)],
+                [sg.Button('Save'), sg.Button('Cancel')]               
+            ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values1 = window.read()
+
+        New_Name = values1[0]
+
+        new_hour_temp = values1[1]
+        new_hour_time = values1[1]
+        new_min_time = values1[2]
+        new_time_section = values1[3]
+        print(values1)
+
+        # Conversions to make time work 
+        if new_time_section == "PM":
+            new_hour_conv = new_hour_time + 12
+        else: new_hour_conv = new_hour_time
+
+        if new_min_time < 10:
+            new_min_strconv = str(new_min_time)
+            new_min_conv = "0" + new_min_strconv
+        else: new_min_conv = str(new_min_time)
+
+        if new_hour_conv < 10:
+            new_hour_strconv = str(new_hour_conv)
+            new_hour_convfin = "0" + new_hour_strconv
+        else: new_hour_convfin = str(new_hour_conv)
+
+        new_current_time = time.localtime()
+        if new_current_time.tm_sec < 10:
+            new_sec_strconv = str(new_current_time.tm_sec)
+            new_sec_conv = "0" + new_sec_strconv
+        else: new_sec_conv = str(new_current_time.tm_sec)
+
+        new_24_time_value = f"{new_hour_convfin}:{new_min_conv}:{new_sec_conv}"
+
+
+        if event == 'Save':
+            window.close()
+            
+            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml') as f:
+                yaml_alarms = yaml.safe_load(f)
+
+            for yaml_alarms[edit_alarm_no][0]["Alarm_Name"] in yaml_alarms:
+                yaml_alarms[edit_alarm_no][0]["Alarm_Name"] = New_Name
+            
+            for yaml_alarms[edit_alarm_no][1]["Time"] in yaml_alarms:
+                yaml_alarms[edit_alarm_no][1]["Time"] = new_24_time_value
+
+            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml', 'w') as f:
+                yaml.dump(yaml_alarms, f)
+            
+            
+            break
+ 
+        if event == sg.WIN_CLOSED or 'Cancel':
+            window.close()
+            break
+            
+
 
 
 def make_window(theme,cfont):
@@ -170,7 +266,6 @@ def make_window(theme,cfont):
         # Create the Window
     window = sg.Window('pyArmClock', layout)
     # Event Loop to process "events" and get the "values" of the inputs
-    print(window)
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
         if event == 'timeout':

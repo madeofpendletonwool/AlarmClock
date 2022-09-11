@@ -1,0 +1,14 @@
+---
+Alarm1:
+  - Alarm_Name: Walk The Dog
+  - Time: '08:15:25'
+  - Sound: /home/collinp/Music/DancingQueen.mp3
+Alarm2:
+  - Alarm_Name: Do The Dishes
+  - Time: '21:07:25'
+  - Sound: /home/collinp/Music/DancingQueen.mp3
+Alarm3:
+  - Alarm_Name: Do Different Task
+  - Time: '15:07:25'
+  - Sound: /home/collinp/Music/DancingQueen.mp3
+
