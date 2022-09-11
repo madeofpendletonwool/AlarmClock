@@ -7,6 +7,8 @@ import yaml
 import pyglet
 import tkinter.font
 import os
+from threading import Thread
+import playsound
 
 Time_Period = ("AM", "PM")
 Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
@@ -18,12 +20,27 @@ def now():
     return nt
 
 def play(playsong):
-    print(f'In play {playsong}')
-    player = pyglet.media.Player()
-    src = pyglet.media.load(playsong)
-    player.queue(src)
+    # print(f'In play {playsong}')
+    # player = pyglet.media.Player()
+    # src = pyglet.media.load(playsong)
+    # player.queue(src)
 
-    player.play()
+    # player.play()
+
+
+    # source = pyglet.media.load(playsong)
+    # source.play()
+    # pyglet.app.run()
+
+    # player = pyglet.media.Player()
+    # song = '/home/collinp/Documents/GitHub/pyArmClock/ExampleMusic/UpInSpace.mp3'
+    # src = pyglet.media.load(song)
+    # player.queue(src)
+
+    # player.play()
+    t = Thread(target=playsound.playsound, args=["/home/collinp/Documents/GitHub/pyArmClock/ExampleMusic/UpInSpace.mp3"])
+    t.start()
+    print('test')
 
 def pause():
     player = pyglet.media.Player()
@@ -77,11 +94,11 @@ def Wake_Up(wakesong):
 
         event, values = window.read()
 
-        if event == sg.WIN_CLOSED or event == 'Snooze': # if user closes window or clicks cancel
+        if event == event == 'Snooze': # if user closes window or clicks cancel
             window.close()
             pause()
             time.sleep(5)
-        else: 
+        if event == sg.WIN_CLOSED or 'Ok': 
             window.close()
             main()
             break
