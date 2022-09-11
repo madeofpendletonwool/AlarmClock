@@ -148,7 +148,7 @@ def alarm_select(theme):
             #get home folder
             home_folder = os.path.expanduser('~')
             # Call in alarms file
-            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml') as f:
+            with open(f'{home_folder}/pyArmClock/alarms.yaml') as f:
                 alarms = yaml.load(f, Loader=yaml.FullLoader)
 
             # Time Conversion
@@ -274,7 +274,7 @@ def edit_alarm(edit_alarm_no, theme):
 
 
             
-            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml') as f:
+            with open(f'{home_folder}/pyArmClock/alarms.yaml') as f:
                 yaml_alarms = yaml.safe_load(f)
 
             for yaml_alarms[edit_alarm_no][0]["Alarm_Name"] in yaml_alarms:
@@ -283,7 +283,7 @@ def edit_alarm(edit_alarm_no, theme):
             for yaml_alarms[edit_alarm_no][1]["Time"] in yaml_alarms:
                 yaml_alarms[edit_alarm_no][1]["Time"] = new_24_time_value
 
-            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml', 'w') as f:
+            with open(f'{home_folder}/pyArmClock/alarms.yaml', 'w') as f:
                 yaml.dump(yaml_alarms, f)
             
             
@@ -317,7 +317,7 @@ def Delete_alarm(edit_alarm_no, theme):
         if event == 'Yes':
             window.close()
             
-            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml') as f:
+            with open(f'{home_folder}/pyArmClock/alarms.yaml') as f:
                 yaml_alarms = yaml.safe_load(f)
 
             for yaml_alarms[edit_alarm_no][0]["Alarm_Name"] in yaml_alarms:
@@ -326,7 +326,7 @@ def Delete_alarm(edit_alarm_no, theme):
             for yaml_alarms[edit_alarm_no][1]["Time"] in yaml_alarms:
                 yaml_alarms[edit_alarm_no][1]["Time"] = reset_alarm_value
 
-            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml', 'w') as f:
+            with open(f'{home_folder}/pyArmClock/alarms.yaml', 'w') as f:
                 yaml.dump(yaml_alarms, f)
             
             
