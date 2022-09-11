@@ -158,13 +158,13 @@ def alarm_select(theme):
 def make_window(theme,cfont):
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
-    layout = [  [sg.Text('',key='clocktime',font=(cfont,40),justification='center')],
+    layout = [  [sg.Text('',key='clocktime',font=(cfont,60),justification='center')],
                 [sg.Text('When Would you like to wake up?')],
                 [sg.Text('Select Time:')],
                 [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period)],
                 [sg.Button('Ok')],
-                [sg.Button('Choose Alarm'), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3"),))],
-                [sg.Button('Change Theme',key='Choose Theme'), [sg.Button('Clock Font',key='-font-')]]
+                [sg.Button('Choose Saved Alarm'), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3"),))],
+                [sg.Button('Set Theme'), sg.Button('Clock Font')]
                 
             ]
         # Create the Window
@@ -176,10 +176,10 @@ def make_window(theme,cfont):
         if event == 'timeout':
             window['clocktime'].update(now())
 
-        if event == 'Choose Theme':
+        if event == 'Set Theme':
             theme_choose(theme)
 
-        if event == 'Choose Alarm':
+        if event == 'Choose Saved Alarm':
             alarm_select(theme)
 
         # Check if alarm values were populated
