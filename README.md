@@ -19,6 +19,7 @@ A quick and dirty python based alarm clock with a GUI and alarm saving functiona
 - Setup Automation
 - 10 Min Snooze (Custom Snooze Duration Coming Soon)
 - Nice GUI (Custom Themes will be implemented in future)
+- Saves up to 3 Alarms with custom names - More will be implemented in the furture
 
 ## Hosting
 
@@ -97,8 +98,8 @@ sudo reboot 0
  - [ ] Custom Snooze Duration
  - [x] Deploy via ansible and fully setup using raspberry pi
  - [ ] Easy setup with package management
- - [ ] Allow for saving of alarms after reboot
- - [ ] Display a big clock on the screen at all times
+ - [x] Allow for saving of alarms after reboot
+ - [x] Display a big clock on the screen at all times
  - [ ] Dockerize (Probably?)
  - [x] Create alarm clock gui
  - [ ] Custom GUI Themes
