@@ -17,13 +17,23 @@ def now():
     nt=ntime.strftime('%H:%M:%S')
     return nt
 
-def play():
+def play(playsong):
+    print(f'In play {playsong}')
+    player = pyglet.media.Player()
+    src = pyglet.media.load(playsong)
+    player.queue(src)
+
     player.play()
 
 def pause():
+    player = pyglet.media.Player()
+
     player.pause()
 
-def alarm(set_alarm_timer):
+def alarm(set_alarm_timer, song):
+    print(f'In alarm function {song}')
+    wakesong = song
+    print(wakesong)
     while True:
         time.sleep(1)
         current_time = datetime.datetime.now()
@@ -33,7 +43,7 @@ def alarm(set_alarm_timer):
         print(now)
         if now == set_alarm_timer:
             print("Time to Wake up")
-            Wake_Up()
+            Wake_Up(wakesong)
             break
 
 def time_conversion():
@@ -52,9 +62,10 @@ def time_conversion():
         hour_convfin = "0" + hour_strconv
     else: hour_convfin = str(hour_conv)
 
-def Wake_Up():
+def Wake_Up(wakesong):
+    print(f'in wakeup {wakesong}')
     while True:
-        play()
+        play(wakesong)
 
         sg.theme('DarkAmber')   # Add a touch of color
         # All the stuff inside your window.
@@ -70,7 +81,11 @@ def Wake_Up():
             window.close()
             pause()
             time.sleep(5)
-        else: break
+        else: 
+            window.close()
+            main()
+            break
+
 
 def reverse_time_conversion(alarm_convert):
 
@@ -296,11 +311,11 @@ def make_window(theme,cfont):
             window.close()
             break
         
-    #Pyglet Music Setup
-    player = pyglet.media.Player()
+    #PygletSsong Setup
+    # player = pyglet.media.Player()
     song = values['Choose Song']
-    src = pyglet.media.load(song)
-    player.queue(src)
+    # src = pyglet.media.load(song)
+    # player.queue(src)
 
     hour_temp = values[0]
     hour_time = values[0]
@@ -331,14 +346,11 @@ def make_window(theme,cfont):
         sec_conv = "0" + sec_strconv
     else: sec_conv = str(current_time.tm_sec)
 
-    print("before returning")
-
 
     set_alarm_timer = f"{hour_convfin}:{min_conv}:{sec_conv}"
-    print('Next line Timer')
     print(set_alarm_timer)
     Time_Period
-    alarm(set_alarm_timer)
+    alarm(set_alarm_timer, song)
 
 
 def main():
