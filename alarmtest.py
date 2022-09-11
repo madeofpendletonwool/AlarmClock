@@ -35,6 +35,22 @@ def alarm(set_alarm_timer):
             Wake_Up()
             break
 
+def time_conversion():
+    # Conversions to make time work - 12 to 24
+    if time_section == "PM":
+        hour_conv = hour_time + 12
+    else: hour_conv = hour_time
+
+    if min_time < 10:
+        min_strconv = str(min_time)
+        min_conv = "0" + min_strconv
+    else: min_conv = str(min_time)
+
+    if hour_conv < 10:
+        hour_strconv = str(hour_conv)
+        hour_convfin = "0" + hour_strconv
+    else: hour_convfin = str(hour_conv)
+
 def Wake_Up():
     while True:
         play()
@@ -55,6 +71,90 @@ def Wake_Up():
             time.sleep(5)
         else: break
 
+def reverse_time_conversion(alarm_convert):
+
+    # Conversions to make time work in reverse order - 24 to 12
+
+    rev_hour = alarm_convert[:2]
+    rev_min = alarm_convert[3:5]
+
+    if rev_hour[:1] == '0':
+        rev_hour1 = rev_hour[:2]
+    else: rev_hour1 = rev_hour
+
+    if rev_min[:1] == '0':
+        rev_min1 = rev_min[:2]
+    else: rev_min1 = rev_min
+
+    num_rev_hour = int(rev_hour1)
+    num_rev_min = int(rev_min1)
+
+    if num_rev_hour > 12:
+        num_rev_hourconv = num_rev_hour - 12
+        rev_time_period = 'PM'
+    else: 
+        rev_time_period = 'AM'
+        num_rev_hourconv = num_rev_hour
+
+
+    num_rev_hourconv1 = str(num_rev_hourconv)
+
+    if num_rev_min < 10:
+        num_rev_minconv = '0' + str(num_rev_min)
+    else: num_rev_minconv = str(num_rev_min)
+
+    rev_time_convert = f'{num_rev_hourconv1}:{num_rev_minconv} {rev_time_period}'
+    return rev_time_convert
+
+
+
+
+def alarm_select(theme):
+        while True:
+            sg.theme(theme)   # Add a touch of color
+            # Call in alarms file
+            with open('/home/collinp/Documents/GitHub/pyArmClock/alarms_sample.yaml') as f:
+                alarms = yaml.load(f, Loader=yaml.FullLoader)
+
+            # Time Conversion
+                rtc1 = reverse_time_conversion(alarms['Alarm1'][1]['Time'])
+                rtc2 = reverse_time_conversion(alarms['Alarm2'][1]['Time'])
+                rtc3 = reverse_time_conversion(alarms['Alarm3'][1]['Time'])
+            # All the stuff inside your window.
+                layout = [  [sg.Text('Alarm 1:')],
+                            [sg.Text(alarms['Alarm1'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc1)],
+                            [sg.Button(f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm1"][0]["Alarm_Name"]}?')],
+                            [sg.Text('Alarm 2:')],
+                            [sg.Text(alarms['Alarm2'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc2)],
+                            [sg.Button(f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm2"][0]["Alarm_Name"]}?')],
+                            [sg.Text('Alarm 3:')],
+                            [sg.Text(alarms['Alarm3'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc3)],
+                            [sg.Button(f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm3"][0]["Alarm_Name"]}?')],
+                            [sg.Button('Ok')]               
+                        ]
+                    
+                window = sg.Window('pyArmClock', layout)
+
+                event, values = window.read()
+
+                if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
+                    window.close()
+                    break
+
+                if event == f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?':
+                    window.close()
+                    alarm(alarms['Alarm1'][1]['Time'])
+                    break
+                elif event == f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?':
+                    window.close()
+                    alarm(alarms['Alarm2'][1]['Time'])
+                    break
+                elif event == f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?':
+                    window.close()
+                    alarm(alarms['Alarm3'][1]['Time'])
+                    break
+
+
 def make_window(theme,cfont):
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
@@ -64,7 +164,7 @@ def make_window(theme,cfont):
                 [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period)],
                 [sg.Button('Ok')],
                 [sg.Button('Choose Alarm'), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3"),))],
-                [sg.Button('Change Theme',key='Choose Theme'), [sg.Button('change clock font',key='-font-')]]
+                [sg.Button('Change Theme',key='Choose Theme'), [sg.Button('Clock Font',key='-font-')]]
                 
             ]
         # Create the Window
@@ -77,7 +177,10 @@ def make_window(theme,cfont):
             window['clocktime'].update(now())
 
         if event == 'Choose Theme':
-            theme_choose()
+            theme_choose(theme)
+
+        if event == 'Choose Alarm':
+            alarm_select(theme)
 
         # Check if alarm values were populated
         if values == {}:
@@ -149,8 +252,9 @@ def main():
     theme='DarkBrown'
     window=make_window(theme,cfont)
 
-def theme_choose():
+def theme_choose(theme):
     #layout and window create
+    sg.theme(theme)
     event,values = sg.Window('Theme Browser',
     [[sg.Text('theme browsing')],
     [sg.Text('click theme color')],
