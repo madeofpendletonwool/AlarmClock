@@ -74,11 +74,21 @@
       clone: yes
       update: yes
 
-  - name: Start Alarm Clock at Boot
-    ansible.builtin.cron:
-      name: "Boot Python Alarm Clock"
-      special_time: reboot
-      job: "/home/pi/pyArmClock/alarm.py"
+  - name: Create Alarm Clock Startup File
+    copy:
+      dest: "/etc/xdg/autostart/pyArmClock.desktop"
+      content: |
+        [Desktop Entry]
+        Type=Application
+        Name=madeofpendletonwools pyArmClock
+        Exec=alarmtest.py
+        Terminal=false
+
+  - name: Move alarm file to bin
+    ansible.builtin.copy:
+      src: /home/pi/pyArmClock/pyArmClock
+      dest: /usr/bin/pyArmClock
+      mode: '0777'
 
 #Last, install driver for screen. This will kill the connection so it needs to be done last. 
 
