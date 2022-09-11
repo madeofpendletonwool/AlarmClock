@@ -103,7 +103,7 @@ sudo reboot 0
  - [ ] Dockerize (Probably?)
  - [x] Create alarm clock gui
  - [ ] Custom GUI Themes
- - [ ] arm it. Need it to run on a raspberry pi
+ - [x] arm it. Need it to run on a raspberry pi
  - [ ] Voice function to tell actual time
  - [x] Sound function
  - [x] Allow you to choose music/sound to play
