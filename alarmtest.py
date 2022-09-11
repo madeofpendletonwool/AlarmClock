@@ -189,6 +189,18 @@ def alarm_select(theme):
                     window.close()
                     edit_alarm(edit_alarm_no, theme)
 
+                if event == f'Delete {alarms["Alarm1"][0]["Alarm_Name"]}?':
+                    edit_alarm_no = "Alarm1"
+                    window.close()
+                    Delete_alarm(edit_alarm_no, theme)
+                elif event == f'Delete {alarms["Alarm2"][0]["Alarm_Name"]}?':
+                    edit_alarm_no = "Alarm2"
+                    window.close()
+                    Delete_alarm(edit_alarm_no, theme)
+                elif event == f'Delete {alarms["Alarm3"][0]["Alarm_Name"]}?':
+                    edit_alarm_no = "Alarm3"
+                    window.close()
+                    Delete_alarm(edit_alarm_no, theme)
 
                 if event == f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?':
                     window.close()
@@ -226,40 +238,41 @@ def edit_alarm(edit_alarm_no, theme):
     while True:
         event, values1 = window.read()
 
-        New_Name = values1[0]
-
-        new_hour_temp = values1[1]
-        new_hour_time = values1[1]
-        new_min_time = values1[2]
-        new_time_section = values1[3]
-        print(values1)
-
-        # Conversions to make time work 
-        if new_time_section == "PM":
-            new_hour_conv = new_hour_time + 12
-        else: new_hour_conv = new_hour_time
-
-        if new_min_time < 10:
-            new_min_strconv = str(new_min_time)
-            new_min_conv = "0" + new_min_strconv
-        else: new_min_conv = str(new_min_time)
-
-        if new_hour_conv < 10:
-            new_hour_strconv = str(new_hour_conv)
-            new_hour_convfin = "0" + new_hour_strconv
-        else: new_hour_convfin = str(new_hour_conv)
-
-        new_current_time = time.localtime()
-        if new_current_time.tm_sec < 10:
-            new_sec_strconv = str(new_current_time.tm_sec)
-            new_sec_conv = "0" + new_sec_strconv
-        else: new_sec_conv = str(new_current_time.tm_sec)
-
-        new_24_time_value = f"{new_hour_convfin}:{new_min_conv}:{new_sec_conv}"
-
-
         if event == 'Save':
             window.close()
+
+            New_Name = values1[0]
+
+            new_hour_temp = values1[1]
+            new_hour_time = values1[1]
+            new_min_time = values1[2]
+            new_time_section = values1[3]
+            print(values1)
+
+            # Conversions to make time work 
+            if new_time_section == "PM":
+                new_hour_conv = new_hour_time + 12
+            else: new_hour_conv = new_hour_time
+
+            if new_min_time < 10:
+                new_min_strconv = str(new_min_time)
+                new_min_conv = "0" + new_min_strconv
+            else: new_min_conv = str(new_min_time)
+
+            if new_hour_conv < 10:
+                new_hour_strconv = str(new_hour_conv)
+                new_hour_convfin = "0" + new_hour_strconv
+            else: new_hour_convfin = str(new_hour_conv)
+
+            new_current_time = time.localtime()
+            if new_current_time.tm_sec < 10:
+                new_sec_strconv = str(new_current_time.tm_sec)
+                new_sec_conv = "0" + new_sec_strconv
+            else: new_sec_conv = str(new_current_time.tm_sec)
+
+            new_24_time_value = f"{new_hour_convfin}:{new_min_conv}:{new_sec_conv}"
+
+
             
             with open(f'{home_folder}/pyArmClock/alarms_sample.yaml') as f:
                 yaml_alarms = yaml.safe_load(f)
@@ -277,6 +290,49 @@ def edit_alarm(edit_alarm_no, theme):
             break
  
         if event == sg.WIN_CLOSED or 'Cancel':
+            window.close()
+            break
+            
+
+def Delete_alarm(edit_alarm_no, theme):
+
+    sg.theme(theme)   # Add a touch of color
+    #get home folder
+    home_folder = os.path.expanduser('~')
+    # All the stuff inside your window.
+    layout = [
+                [sg.Text(f'Are you sure you want to delete {edit_alarm_no}? This will reset it back to defaults.')],
+                [sg.Button('Yes'), sg.Button('No')]               
+            ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values1 = window.read()
+
+        Reset_Name = "New Alarm"
+        reset_alarm_value = "12:00:00"
+
+
+        if event == 'Yes':
+            window.close()
+            
+            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml') as f:
+                yaml_alarms = yaml.safe_load(f)
+
+            for yaml_alarms[edit_alarm_no][0]["Alarm_Name"] in yaml_alarms:
+                yaml_alarms[edit_alarm_no][0]["Alarm_Name"] = Reset_Name
+            
+            for yaml_alarms[edit_alarm_no][1]["Time"] in yaml_alarms:
+                yaml_alarms[edit_alarm_no][1]["Time"] = reset_alarm_value
+
+            with open(f'{home_folder}/pyArmClock/alarms_sample.yaml', 'w') as f:
+                yaml.dump(yaml_alarms, f)
+            
+            
+            break
+ 
+        if event == sg.WIN_CLOSED or 'No':
             window.close()
             break
             
