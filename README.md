@@ -24,7 +24,7 @@ A quick and dirty python based alarm clock with a GUI and alarm saving functiona
 ## Hosting
 Coming Soon
 
-## Installing/Running
+## Installing
 
 #### There's two options for install - Manual and Automated with Ansible
 I seriously recommend the automated install - And the manual install will not be support beyond giving package install instructions listed here. 
