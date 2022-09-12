@@ -4,11 +4,9 @@ import time
 import datetime
 import PySimpleGUI as sg
 import yaml
-import pyglet
 import tkinter.font
 import os
-from threading import Thread
-import playsound
+import pygame
 
 Time_Period = ("AM", "PM")
 Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
@@ -19,36 +17,59 @@ def now():
     nt=ntime.strftime('%H:%M:%S')
     return nt
 
-def play(playsong):
-    # print(f'In play {playsong}')
-    # player = pyglet.media.Player()
-    # src = pyglet.media.load(playsong)
-    # player.queue(src)
+def play_song(playsong, music_status):
 
-    # player.play()
+    if music_status == 'play':
 
+        pygame.mixer.init()
+        pygame.mixer.music.load(playsong)
+        pygame.mixer.music.set_volume(0.7)
+        pygame.mixer.music.play()
 
-    # source = pyglet.media.load(playsong)
-    # source.play()
-    # pyglet.app.run()
+    elif music_status == 'pause':
 
-    # player = pyglet.media.Player()
-    # song = '/home/collinp/Documents/GitHub/pyArmClock/ExampleMusic/UpInSpace.mp3'
-    # src = pyglet.media.load(song)
-    # player.queue(src)
+        pygame.mixer.music.pause()
 
-    # player.play()
-    t = Thread(target=playsound.playsound, args=["/home/collinp/Documents/GitHub/pyArmClock/ExampleMusic/UpInSpace.mp3"])
-    t.start()
-    print('test')
+def pause(wakesong):
+    while True:
+        sg.theme('DarkAmber') 
 
-def pause():
-    player = pyglet.media.Player()
+        layout = [  [sg.Text('Wake up!')],
+            [sg.Button('Ok'), sg.Button('Snooze')]             
+        ]
+        pygame.mixer.pause()
+        window = sg.Window('pyArmClock', layout)
 
-    player.pause()
+        event, values = window.read()
+
+        if event == 'Snooze':
+            while True:
+
+                play_song(wakesong, 'pause')
+                window.close()
+                time.sleep(5)
+
+                play_song(wakesong, 'play')
+
+                sg.theme('DarkAmber') 
+
+                layout = [  [sg.Text('Wake up!')],
+                    [sg.Button('Ok'), sg.Button('Snooze')]             
+                ]
+                pygame.mixer.pause()
+                window = sg.Window('pyArmClock', layout)
+
+                event, values = window.read()
+                if event == 'Snooze':
+                    return
+                else:
+                    window.close()
+                    main()
+        elif event == 'Ok':
+            window.close()
+            break
 
 def alarm(set_alarm_timer, song):
-    print(f'In alarm function {song}')
     wakesong = song
     print(wakesong)
     while True:
@@ -80,9 +101,8 @@ def time_conversion():
     else: hour_convfin = str(hour_conv)
 
 def Wake_Up(wakesong):
-    print(f'in wakeup {wakesong}')
     while True:
-        play(wakesong)
+        play_song(wakesong, 'play')
 
         sg.theme('DarkAmber')   # Add a touch of color
         # All the stuff inside your window.
@@ -96,8 +116,7 @@ def Wake_Up(wakesong):
 
         if event == event == 'Snooze': # if user closes window or clicks cancel
             window.close()
-            pause()
-            time.sleep(5)
+            pause(wakesong)
         if event == sg.WIN_CLOSED or 'Ok': 
             window.close()
             main()
