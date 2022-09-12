@@ -37,17 +37,13 @@
     ansible.builtin.pip:
       name: tk
 
-  - name: Install Alarm dependancies - pyglet
+  - name: Install Alarm dependancies - pygame
     ansible.builtin.pip:
-      name: pyglet
+      name: pygame
 
   - name: Install Alarm dependancies - pyyaml
     ansible.builtin.pip:
       name: pyyaml
-
-  - name: Install Alarm dependancies - pyyaml
-    ansible.builtin.pip:
-      name: playsound
 
   - name: Install apt tkinter
     ansible.builtin.apt:
