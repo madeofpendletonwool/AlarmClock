@@ -30,7 +30,8 @@ def play_song(playsong, music_status):
 
         pygame.mixer.music.pause()
 
-def pause(wakesong):
+def Wake_Up(wakesong):
+    play_song(wakesong, 'play')
     while True:
         sg.theme('DarkAmber') 
 
@@ -61,13 +62,15 @@ def pause(wakesong):
 
                 event, values = window.read()
                 if event == 'Snooze':
-                    return
+                    window.close()
+                    continue
                 else:
+                    play_song(wakesong, 'pause')
                     window.close()
                     main()
         elif event == 'Ok':
             window.close()
-            break
+            main()
 
 def alarm(set_alarm_timer, song):
     wakesong = song
@@ -99,29 +102,6 @@ def time_conversion():
         hour_strconv = str(hour_conv)
         hour_convfin = "0" + hour_strconv
     else: hour_convfin = str(hour_conv)
-
-def Wake_Up(wakesong):
-    while True:
-        play_song(wakesong, 'play')
-
-        sg.theme('DarkAmber')   # Add a touch of color
-        # All the stuff inside your window.
-        layout = [  [sg.Text('Wake up!')],
-                    [sg.Button('Ok'), sg.Button('Snooze')]             
-                ]
-            
-        window = sg.Window('pyArmClock', layout)
-
-        event, values = window.read()
-
-        if event == event == 'Snooze': # if user closes window or clicks cancel
-            window.close()
-            pause(wakesong)
-        if event == sg.WIN_CLOSED or 'Ok': 
-            window.close()
-            main()
-            break
-
 
 def reverse_time_conversion(alarm_convert):
 
