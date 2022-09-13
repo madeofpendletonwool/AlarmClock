@@ -95,7 +95,7 @@ sudo reboot 0
 
  - [x] Create Code that can set off Alarms using a time module
  - [x] Snooze functionality
- - [ ] Custom Snooze Duration
+ - [x] Custom Snooze Duration
  - [x] Deploy via ansible and fully setup using raspberry pi
  - [ ] Easy setup with package management
  - [x] Allow for saving of alarms after reboot

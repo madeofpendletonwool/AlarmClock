@@ -28,6 +28,14 @@
   - name: Install pip
     ansible.builtin.apt:
       name: pip
+
+  - name: Install espeak (required for speaking time)
+    ansible.builtin.apt:
+      name: espeak
+
+  - name: Install ffmpeg (required for speaking time)
+    ansible.builtin.apt:
+      name: espeak
   
   - name: Install Alarm dependancies - pysimplegui
     ansible.builtin.pip:
@@ -44,6 +52,10 @@
   - name: Install Alarm dependancies - pyyaml
     ansible.builtin.pip:
       name: pyyaml
+
+  - name: Install pyttsx3
+    ansible.builtin.pip:
+      name: pyttsx3
 
   - name: Install apt tkinter
     ansible.builtin.apt:
