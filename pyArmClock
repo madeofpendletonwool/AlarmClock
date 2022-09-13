@@ -387,11 +387,6 @@ def snooze_set(theme):
             window.close()
             break
 
-    
-
-
-
-
 def make_window(theme,cfont):
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
@@ -413,7 +408,12 @@ def make_window(theme,cfont):
             window['clocktime'].update(now())
 
         if event == 'Set Theme':
-            theme_choose(theme)
+            window.close()
+            theme_choose(theme, cfont)
+
+        if event == 'Clock Font':
+            window.close()
+            clock_font(theme)
 
         if event == 'Snooze Duration':
             snooze_setting = snooze_set(theme)
@@ -492,54 +492,50 @@ def main():
     theme='DarkBrown'
     window=make_window(theme,cfont)
 
-def theme_choose(theme):
-    #layout and window create
-    sg.theme(theme)
-    event,values = sg.Window('Theme Browser',
-    [[sg.Text('theme browsing')],
-    [sg.Text('click theme color')],
-    [sg.Combo(values=sg.theme_list(),size=(20,12),key='-LIST-',readonly=True)],
-    [sg.OK(),sg.Cancel()]]).read(close=True)
+def theme_choose(theme, cfont):
 
-            #select and click 'OK', change theme value 
-    #and pass over  make_window function it
-    if event == 'OK':
-        theme=values['-LIST-']
-        window.close()
-        make_window(theme,cfont) 
-
+    sg.theme(theme)   # Add a touch of color
+    layout = [  [sg.Text('Theme Browsing')],
+                [sg.Text('click theme color')],
+                [sg.Combo(values=sg.theme_list(),size=(20,12),key='-LIST-',readonly=True)],
+                [sg.OK(),sg.Cancel()]
+        ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout)
+    # Event Loop to process "events" and get the "values" of the inputs
     while True:
-#if you set timeout, you can operate GUI by spend time
-        event,values=wnd.read(timeout=10,timeout_key='-timeout-')
-        #getting current time per 10ms
-        if event == '-timeout-':
-            wnd['-time-'].update(now())
+        event, values = window.read(timeout=10,timeout_key='timeout')
 
-        if event in (sg.WIN_CLOSED,'-close-'):
-            break
+        #select and click 'OK', change theme value 
+        #and pass over  make_window function it
+        if event == 'OK':
+            theme=values['-LIST-']
+            print(theme)
+            window.close()
+            make_window(theme, cfont)
 
-            #select and click 'OK', change theme value 
-            #and pass over  make_window function it
-            if event == 'OK':
-                theme=values['-LIST-']
-                wnd.close()
-                wnd= make_window(theme,cfont) 
-        #when click font change button, open the window its looks like theme window
-        if event == '-font-':
-            #layout and window create
-            event,values = sg.Window('Font Browser',
-            [[sg.Text('Font browsing')],
-            [sg.Text('click font')],
-            [sg.Combo(values=tkinter.font.families(),size=(20,12),key='-FONT-',readonly=True)],
-            # or
-            # [sg.Combo(values=sg.Text.fonts_installed_list(),size=(20,12),key='-FONT-',readonly=True)],
-            [sg.OK(),sg.Cancel()]]).read(close=True)
 
-            #change font value and pass over make_window function it
-            if event == 'OK':
-                cfont=values['-FONT-']
-                wnd.close()
-                wnd= make_window(theme,cfont)
+def clock_font(theme):
+    #when click font change button, open the window its looks like theme window
+    #layout and window create
+
+    sg.theme(theme)   # Add a touch of color
+    layout = [  [sg.Text('Font Chooser')],
+                [sg.Text('Please Choose Clock Font')],
+                [sg.Combo(values=tkinter.font.families(),size=(20,12),key='-FONT-',readonly=True)],
+                [sg.OK(),sg.Cancel()]
+        ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read(timeout=10,timeout_key='timeout')
+
+        #change font value and pass over make_window function it
+        if event == 'OK':
+            cfont=values['-FONT-']
+            window.close()
+            make_window(theme, cfont) 
             
         
     wnd.close()
