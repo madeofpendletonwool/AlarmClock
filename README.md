@@ -110,6 +110,7 @@ sudo reboot 0
  - [ ] Custom Pi image that can be deployed using an img file
  - [ ] Easy setup with package management
  - [ ] Dockerize (Probably?)
+ - [ ] Make theme, previous song choice, and font all write to a yaml file so they continue for each reboot
 
 ## Platform Availability
 
