@@ -440,7 +440,7 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer):
 
         if event == 'Ok': # if user closes window or clicks cancel
             window.close()
-            make_window(theme, cfont, song)
+            make_window(theme, cfont, song, alarm_set, set_alarm_timer)
             break
          
 
