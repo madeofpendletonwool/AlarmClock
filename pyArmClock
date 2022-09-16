@@ -528,7 +528,7 @@ def main():
     #preset font and theme
     cfont='Times New Roman'
     theme='DarkBrown'
-    song = 'set os home'
+    song = os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3'
     window=make_window(theme,cfont, song)
 
 def theme_choose(theme, cfont, song):
