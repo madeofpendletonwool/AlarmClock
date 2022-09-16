@@ -111,6 +111,7 @@ sudo reboot 0
  - [ ] Easy setup with package management
  - [ ] Dockerize (Probably?)
  - [ ] Make theme, previous song choice, and font all write to a yaml file so they continue for each reboot
+ - [x] Add a 'Alarm set for:' display after alarm is set
 
 ## Platform Availability
 
