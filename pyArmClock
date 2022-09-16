@@ -100,19 +100,33 @@ def clock_during_alarm():
         if event == 'Choose Saved Alarm':
             alarm_select(theme)
 
-def alarm(set_alarm_timer, song, snooze_setting):
-    wakesong = song
-    print(wakesong)
+def alarm(set_alarm_timer, song, snooze_setting, theme, cfont):
+    sg.theme(theme)   # Add a touch of color
+        # All the stuff inside your window.
+    layout = [  [sg.Text('',key='clocktime',font=(cfont,60),justification='center')],
+                [sg.Button('Cancel Set Alarm'), sg.Button('Set Theme'), sg.Button('Clock Font')]
+                
+            ]
+            # Create the Window
+    window = sg.Window('pyArmClock', layout)
+        # Event Loop to process "events" and get the "values" of the inputs
     while True:
+        event, values = window.read(timeout=10,timeout_key='timeout')
+        if event == 'timeout':
+            window['clocktime'].update(now())
+        if event == 'Cancel Set Alarm':
+            window.close()
+            main()
         time.sleep(1)
         current_time = datetime.datetime.now()
-        now = current_time.strftime("%H:%M:%S")
+        currentnow = current_time.strftime("%H:%M:%S")
         date = current_time.strftime("%d/%m/%Y")
         print("The Set Date is:",date)
-        print(now)
-        if now == set_alarm_timer:
+        print(currentnow)
+        if currentnow == set_alarm_timer:
+            window.close()
             print("Time to Wake up")
-            Wake_Up(wakesong, snooze_setting)
+            Wake_Up(song, snooze_setting)
             break
 
 def time_conversion():
@@ -387,16 +401,54 @@ def snooze_set(theme):
             window.close()
             break
 
-def make_window(theme,cfont):
+def alarm_options(theme, cfont):
+    sg.theme(theme)   # Add a touch of color
+    # All the stuff inside your window.
+    layout = [  [sg.Button('    Choose Saved Alarm    '), sg.FileBrowse('    Choose Song   ', file_types=(("MP3 files", "*.mp3"),))],
+                [sg.Button('Set Theme'), sg.Button('Clock Font'), sg.Button('Snooze Duration')],
+                [sg.Button('Ok')]
+                
+            ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read()
+        song = values['    Choose Song   ']
+        if event == 'Set Theme':
+            window.close()
+            theme_choose(theme, cfont, song)
+
+        if event == 'Clock Font':
+            window.close()
+            clock_font(theme, song)
+            theme=values['-LIST-']
+            print(theme)
+            window.close()
+            make_window(theme, cfont, song) 
+        if event == 'Snooze Duration':
+            snooze_setting = snooze_set(theme)
+
+        if event == '    Choose Saved Alarm    ':
+            alarm_select(theme)
+
+        if event == sg.WIN_CLOSED: # if user closes window or clicks cancel
+            window.close()
+            main()
+
+        if event == 'Ok': # if user closes window or clicks cancel
+            window.close()
+            make_window(theme, cfont, song)
+            break
+         
+
+def make_window(theme,cfont, song):
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
     layout = [  [sg.Text('',key='clocktime',font=(cfont,60),justification='center')],
-                [sg.Text('When Would you like to wake up?')],
-                [sg.Text('Select Time:')],
-                [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period)],
-                [sg.Button('Ok')],
-                [sg.Button('    Choose Saved Alarm    '), sg.FileBrowse('    Choose Song   ', file_types=(("MP3 files", "*.mp3"),))],
-                [sg.Button('Set Theme'), sg.Button('Clock Font'), sg.Button('Snooze Duration')]
+                [sg.Text('When would you like to wake up?'), sg.Text('Select Time:')],
+                [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period), sg.Button('Ok')],
+                [sg.Button('Saved Alarm or Options')]
                 
             ]
         # Create the Window
@@ -406,20 +458,10 @@ def make_window(theme,cfont):
         event, values = window.read(timeout=10,timeout_key='timeout')
         if event == 'timeout':
             window['clocktime'].update(now())
-
-        if event == 'Set Theme':
+        
+        if event == "Saved Alarm or Options":
             window.close()
-            theme_choose(theme, cfont)
-
-        if event == 'Clock Font':
-            window.close()
-            clock_font(theme)
-
-        if event == 'Snooze Duration':
-            snooze_setting = snooze_set(theme)
-
-        if event == '    Choose Saved Alarm    ':
-            alarm_select(theme)
+            alarm_options(theme, cfont)
 
         # Check if alarm values were populated
         if values == {}:
@@ -443,12 +485,6 @@ def make_window(theme,cfont):
         if event == 'Ok': # if user closes window or clicks cancel
             window.close()
             break
-        
-    #PygletSsong Setup
-    # player = pyglet.media.Player()
-    song = values['    Choose Song   ']
-    # src = pyglet.media.load(song)
-    # player.queue(src)
 
     hour_temp = values[0]
     hour_time = values[0]
@@ -483,16 +519,19 @@ def make_window(theme,cfont):
     set_alarm_timer = f"{hour_convfin}:{min_conv}:{sec_conv}"
     print(set_alarm_timer)
     Time_Period
-    alarm(set_alarm_timer, song, snooze_setting)
+    if 'snooze_setting' not in locals():
+        snooze_setting = 10
+    alarm(set_alarm_timer, song, snooze_setting, theme, cfont)
 
 
 def main():
     #preset font and theme
     cfont='Times New Roman'
     theme='DarkBrown'
-    window=make_window(theme,cfont)
+    song = 'set os home'
+    window=make_window(theme,cfont, song)
 
-def theme_choose(theme, cfont):
+def theme_choose(theme, cfont, song):
 
     sg.theme(theme)   # Add a touch of color
     layout = [  [sg.Text('Theme Browsing')],
@@ -512,10 +551,10 @@ def theme_choose(theme, cfont):
             theme=values['-LIST-']
             print(theme)
             window.close()
-            make_window(theme, cfont)
+            make_window(theme, cfont, song)
 
 
-def clock_font(theme):
+def clock_font(theme, song):
     #when click font change button, open the window its looks like theme window
     #layout and window create
 
@@ -535,7 +574,7 @@ def clock_font(theme):
         if event == 'OK':
             cfont=values['-FONT-']
             window.close()
-            make_window(theme, cfont) 
+            make_window(theme, cfont, song) 
             
         
     wnd.close()
