@@ -526,8 +526,17 @@ def make_window(theme,cfont, song, alarm_set, set_alarm_timer):
         snooze_setting = 10
     alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time)
 
+def config_setup():
+    config_location = os.path.expanduser('~') + '/pyArmClock/config.yaml'
+    
+
 
 def main():
+    # Check if Config File exists and create if not
+    file_exists = os.path.exists(os.path.expanduser('~') + '/pyArmClock/config.yaml')
+    if file_exists == False:
+        config_setup()
+
     #preset font and theme
     alarm_set=False
     cfont='Times New Roman'
