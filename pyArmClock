@@ -195,7 +195,7 @@ def alarm_select(theme):
             #get home folder
             home_folder = os.path.expanduser('~')
             # Call in alarms file
-            with open(f'{home_folder}/pyArmClock/alarms.yaml') as f:
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
                 alarms = yaml.load(f, Loader=yaml.FullLoader)
 
             # Time Conversion
@@ -321,7 +321,7 @@ def edit_alarm(edit_alarm_no, theme):
 
 
             
-            with open(f'{home_folder}/pyArmClock/alarms.yaml') as f:
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
                 yaml_alarms = yaml.safe_load(f)
 
             for yaml_alarms[edit_alarm_no][0]["Alarm_Name"] in yaml_alarms:
@@ -528,8 +528,29 @@ def make_window(theme,cfont, song, alarm_set, set_alarm_timer):
 
 def config_setup():
     config_location = os.path.expanduser('~') + '/pyArmClock/config.yaml'
-    
+    with open(config_location, 'a') as f:
+        line1 = '---'
+        linenew = '\n'
+        line2 = 'Alarm1:'
+        line3 = '  - Alarm_Name: Alarm1'
+        line4 = "  - Time: '08:00:00'"
+        line5 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
+        line6 = 'Alarm2:'
+        line7 = '  - Alarm_Name: Alarm2'
+        line8 = "  - Time: '08:00:00'"
+        line9 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
+        line10 = 'Alarm3:'
+        line11 = '  - Alarm_Name: Alarm3'
+        line12 = "  - Time: '08:00:00'"
+        line13 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
+        line14 = "SetSong:"
+        line15 = "  - Song_Location: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
+        line16 = "SetFont:"
+        line17 = "  - Set_Font: 'Times New Roman'"
+        line18 = "SetTheme:"
+        line19 = "  - Set_Theme: 'DarkBrown'"
 
+        f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19])
 
 def main():
     # Check if Config File exists and create if not
@@ -537,16 +558,24 @@ def main():
     if file_exists == False:
         config_setup()
 
+    #Set Default Values via saved config file
+    home_folder = os.path.expanduser('~')
+# Call in alarms file
+    with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+        alarms = yaml.load(f, Loader=yaml.FullLoader)
+
     #preset font and theme
     alarm_set=False
-    cfont='Times New Roman'
-    theme='DarkBrown'
-    song = os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3'
-    alarm_set = False
+    cfont= alarms['SetFont'][0]['Set_Font']
+    theme= alarms['SetTheme'][0]['Set_Theme']
+    song = alarms['SetSong'][0]['Song_Location']
     set_alarm_timer = 'Not Defined'
     window=make_window(theme,cfont, song, alarm_set, set_alarm_timer)
 
 def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer):
+
+    #Set Home
+    home_folder = os.path.expanduser('~')
 
     sg.theme(theme)   # Add a touch of color
     layout = [  [sg.Text('Theme Browsing')],
@@ -564,6 +593,15 @@ def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer):
         #and pass over  make_window function it
         if event == 'OK':
             theme=values['-LIST-']
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+                yaml_theme = yaml.safe_load(f)
+
+            for yaml_theme['SetTheme'][0]["Set_Theme"] in yaml_theme:
+                yaml_theme['SetTheme'][0]["Set_Theme"] = theme
+
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
+                yaml.dump(yaml_theme, f)
+
             print(theme)
             window.close()
             if alarm_set == False:
@@ -574,6 +612,8 @@ def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer):
 
 def clock_font(theme, cfont, song, alarm_set, set_alarm_timer):
     #when click font change button, open the window its looks like theme window
+    #Set Home
+    home_folder = os.path.expanduser('~')
     #layout and window create
 
     sg.theme(theme)   # Add a touch of color
@@ -591,6 +631,14 @@ def clock_font(theme, cfont, song, alarm_set, set_alarm_timer):
         #change font value and pass over make_window function it
         if event == 'OK':
             cfont=values['-FONT-']
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+                yaml_font = yaml.safe_load(f)
+
+            for yaml_font['SetFont'][0]["Set_Font"] in yaml_font:
+                yaml_font['SetFont'][0]["Set_Font"] = cfont
+
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
+                yaml.dump(yaml_font, f)
             window.close()
             if alarm_set == False:
                 make_window(theme, cfont, song, alarm_set, set_alarm_timer)
