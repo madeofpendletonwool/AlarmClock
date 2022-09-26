@@ -17,17 +17,16 @@ A quick and dirty python based alarm clock with a GUI and alarm saving functiona
 - Alarm Functionality
 - Song Choice
 - Setup Automation
-- 10 Min Snooze (Custom Snooze Duration Coming Soon)
-- Nice GUI (Custom Themes will be implemented in future)
+- Custom Snooze Duration (10 mins by Default)
+- GUI with custom themes implemented
+- Large List of Custom Clock Fonts
+- Saves previous theme, font, and song choice in config file after reboots
 - Saves up to 3 Alarms with custom names - More will be implemented in the furture
-
-## Hosting
-Coming Soon
 
 ## Installing
 
 #### There's two options for install - Manual and Automated with Ansible
-I seriously recommend the automated install - And the manual install will not be support beyond giving package install instructions listed here. 
+I seriously recommend the automated install - The manual install will not be support beyond giving package install instructions listed here. 
 
 #### **Raspberry Pi Automated Install:**
 
@@ -109,7 +108,6 @@ sudo reboot 0
  - [ ] Support for music files other than mp3's
  - [ ] Custom Pi image that can be deployed using an img file
  - [ ] Easy setup with package management
- - [ ] Dockerize (Probably?)
  - [x] Make theme, previous song choice, and font all write to a yaml file so they continue for each reboot
  - [x] Add a 'Alarm set for:' display after alarm is set
 
