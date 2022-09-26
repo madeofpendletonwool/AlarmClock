@@ -409,6 +409,8 @@ def snooze_set(theme):
 
 def alarm_options(theme, cfont, alarm_set, set_alarm_timer):
     sg.theme(theme)   # Add a touch of color
+    #Set Home
+    home_folder = os.path.expanduser('~')
     # All the stuff inside your window.
     layout = [  [sg.Button('    Choose Saved Alarm    '), sg.FileBrowse('    Choose Song   ', file_types=(("MP3 files", "*.mp3"),))],
                 [sg.Button('Set Theme'), sg.Button('Clock Font'), sg.Button('Snooze Duration')],
@@ -420,7 +422,17 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer):
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read()
+        #Set Song Info
         song = values['    Choose Song   ']
+        with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+            yaml_song = yaml.safe_load(f)
+
+        for yaml_song['SetSong'][0]["Song_Location"] in yaml_song:
+            yaml_song['SetSong'][0]["Song_Location"] = song
+
+        with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
+            yaml.dump(yaml_song, f)
+
         if event == 'Set Theme':
             window.close()
             theme_choose(theme, cfont, song, alarm_set, set_alarm_timer)
