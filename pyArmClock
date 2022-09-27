@@ -109,7 +109,7 @@ def clock_during_alarm():
         if event == 'Choose Saved Alarm':
             alarm_select(theme)
 
-def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time):
+def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_Format):
     alarm_set=True
     sg.theme(theme)   # Add a touch of color
         # All the stuff inside your window.
@@ -124,17 +124,16 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time):
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
         if event == 'timeout':
-            window['clocktime'].update(now())
+            window['clocktime'].update(now(Set_Format))
         if event == 'Cancel Set Alarm':
             window.close()
             main()
         if event == 'Set Theme':
             window.close()
-            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer)
+            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
         if event == 'Clock Font':
             window.close()
-            clock_font(theme, cfont, song, alarm_set, set_alarm_timer)
-        time.sleep(1)
+            clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
         current_time = datetime.datetime.now()
         currentnow = current_time.strftime("%H:%M:%S")
         date = current_time.strftime("%d/%m/%Y")
@@ -338,7 +337,7 @@ def edit_alarm(edit_alarm_no, theme):
             for yaml_alarms[edit_alarm_no][1]["Time"] in yaml_alarms:
                 yaml_alarms[edit_alarm_no][1]["Time"] = new_24_time_value
 
-            with open(f'{home_folder}/pyArmClock/alarms.yaml', 'w') as f:
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
                 yaml.dump(yaml_alarms, f)
             
             
@@ -415,13 +414,13 @@ def snooze_set(theme):
             window.close()
             break
 
-def alarm_options(theme, cfont, alarm_set, set_alarm_timer):
+def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format):
     sg.theme(theme)   # Add a touch of color
     #Set Home
     home_folder = os.path.expanduser('~')
     # All the stuff inside your window.
-    layout = [  [sg.Button('    Choose Saved Alarm    '), sg.FileBrowse('    Choose Song   ', file_types=(("MP3 files", "*.mp3"),))],
-                [sg.Button('Set Theme'), sg.Button('Clock Font'), sg.Button('Snooze Duration')],
+    layout = [  [sg.Button('Saved Alarms'), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3"),)), sg.Button('Clock Format')],
+                [sg.Button(' Set Theme '), sg.Button('Clock Font'), sg.Button(' Snooze Duration ')],
                 [sg.Button('Ok')]
                 
             ]
@@ -431,7 +430,7 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer):
     while True:
         event, values = window.read()
         #Set Song Info
-        song = values['    Choose Song   ']
+        song = values['Choose Song']
         with open(f'{home_folder}/pyArmClock/config.yaml') as f:
             yaml_song = yaml.safe_load(f)
 
@@ -441,17 +440,22 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer):
         with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
             yaml.dump(yaml_song, f)
 
-        if event == 'Set Theme':
+        if event == ' Set Theme ':
             window.close()
-            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer)
+            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
 
         if event == 'Clock Font':
             window.close()
-            clock_font(theme, cfont, song, alarm_set, set_alarm_timer)
-        if event == 'Snooze Duration':
+            clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
+        
+        if event == ' Snooze Duration ':
             snooze_setting = snooze_set(theme)
 
-        if event == '    Choose Saved Alarm    ':
+        if event == 'Clock Format':
+            window.close()
+            clock_format(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format)
+
+        if event == 'Saved Alarms':
             alarm_select(theme)
 
         if event == sg.WIN_CLOSED: # if user closes window or clicks cancel
@@ -460,11 +464,46 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer):
 
         if event == 'Ok': # if user closes window or clicks cancel
             window.close()
-            make_window(theme, cfont, song, alarm_set, set_alarm_timer)
+            make_window(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format)
             break
          
+def clock_format(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format):
+    # Set Clock Format for 12 or 24 hour options
+    format_options = ['12', '24']
 
-def make_window(theme,cfont, song, alarm_set, set_alarm_timer, Set_Format):
+    #Set Home
+    home_folder = os.path.expanduser('~')
+
+    sg.theme(theme)   # Add a touch of color
+    layout = [  [sg.Text('Choose Clock Format')],
+                [sg.Combo(format_options)],
+                [sg.OK(),sg.Cancel()]
+        ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read(timeout=10,timeout_key='timeout')
+
+        #select and click 'OK', change theme value 
+        #and pass over  make_window function it
+        if event == 'OK':
+            clock_setting=values[0]
+            print(clock_setting)
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+                yaml_format = yaml.safe_load(f)
+
+            for yaml_format['SetFormat'][0]["Set_Format"] in yaml_format:
+                yaml_format['SetFormat'][0]["Set_Format"] = clock_setting
+
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
+                yaml.dump(yaml_format, f)
+
+            window.close()
+            main()
+
+
+def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format):
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
     layout = [  [sg.Text('',key='clocktime',font=(cfont,60),justification='center')],
@@ -483,7 +522,7 @@ def make_window(theme,cfont, song, alarm_set, set_alarm_timer, Set_Format):
         
         if event == "Saved Alarm or Options":
             window.close()
-            alarm_options(theme, cfont, alarm_set, set_alarm_timer)
+            alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format)
 
         # Check if alarm values were populated
         if values == {}:
@@ -544,7 +583,7 @@ def make_window(theme,cfont, song, alarm_set, set_alarm_timer, Set_Format):
     Time_Period
     if 'snooze_setting' not in locals():
         snooze_setting = 10
-    alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time)
+    alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_Format)
 
 def config_setup():
     config_location = os.path.expanduser('~') + '/pyArmClock/config.yaml'
@@ -593,9 +632,10 @@ def main():
     song = alarms['SetSong'][0]['Song_Location']
     Time_Format = alarms['SetFormat'][0]['Set_Format']
     set_alarm_timer = 'Not Defined'
-    window=make_window(theme,cfont, song, alarm_set, set_alarm_timer, Time_Format)
+    set_time = 'Net Defined'
+    window=make_window(theme,cfont, song, alarm_set, set_alarm_timer, Time_Format, set_time)
 
-def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer):
+def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format):
 
     #Set Home
     home_folder = os.path.expanduser('~')
@@ -628,12 +668,12 @@ def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer):
             print(theme)
             window.close()
             if alarm_set == False:
-                make_window(theme, cfont, song, alarm_set, set_alarm_timer)
+                make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
             elif alarm_set == True:
-                alarm(set_alarm_timer, song, snooze_setting, theme, cfont)
+                alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_Format)
 
 
-def clock_font(theme, cfont, song, alarm_set, set_alarm_timer):
+def clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format):
     #when click font change button, open the window its looks like theme window
     #Set Home
     home_folder = os.path.expanduser('~')
@@ -664,9 +704,9 @@ def clock_font(theme, cfont, song, alarm_set, set_alarm_timer):
                 yaml.dump(yaml_font, f)
             window.close()
             if alarm_set == False:
-                make_window(theme, cfont, song, alarm_set, set_alarm_timer)
+                make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
             elif alarm_set == True:
-                alarm(set_alarm_timer, song, snooze_setting, theme, cfont)
+                alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_Format)
             
         
     wnd.close()
