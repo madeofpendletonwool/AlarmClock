@@ -25,10 +25,14 @@ A quick and dirty python based alarm clock with a GUI and alarm saving functiona
 
 ## Installing
 
-#### There's two options for install - Manual and Automated with Ansible
-I seriously recommend the automated install - The manual install will not be support beyond giving package install instructions listed here. 
+#### There's two options for instalation on a Raspberry Pi - Automated with Ansible and install an image directly to an sd card
 
-#### **Raspberry Pi Automated Install:**
+The ansible install is a little more hands on and can be seen a bit of a learning experience. They both work great though. 
+
+#### **Raspberry Pi Automated Ansible Install:**
+NOTE: No ansible knowledge is really needed. Just run these commands exactly.
+
+Simply get a raspberry pi going with the base 32-bit raspberry pi os on it. Connect it to the internet and ssh into it. Run these commands next.
 
 
 Update!
@@ -55,7 +59,8 @@ Reboot!
 ```
 sudo reboot 0
 ```
-
+#### **Raspberry Pi Image Install**
+This method is a work in progress
 #### **x86 Computer Install:**
 The intention here is that you can install the alarm clock on anything, regardless of platform or architechture. I may add more options down the road as well for CPU architecture. The instructure are almost the same as with raspberry pi. Just a different playbook. 
 
@@ -84,11 +89,6 @@ Reboot!
 sudo reboot 0
 ```
 
-#### **Manual Install:**
-
-*Seriously I don't recommend this. It's kinda awful with all the commands needed*
-
-*Instructions for this method a work in progress*
 
 ## ToDo
 
