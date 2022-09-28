@@ -89,7 +89,7 @@
         [Desktop Entry]
         Type=Application
         Name=madeofpendletonwools pyArmClock
-        Exec=alarmtest.py
+        Exec=pyArmClock
         Terminal=false
 
   - name: Move alarm file to bin
