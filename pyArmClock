@@ -115,7 +115,7 @@ def clock_during_alarm():
             window['clocktime'].update(now())
 
         if event == 'Set Theme':
-            theme_choose(theme)
+            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
 
         if event == 'Choose Saved Alarm':
             alarm_select(theme)
@@ -141,10 +141,10 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_For
             main()
         if event == 'Set Theme':
             window.close()
-            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
+            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
         if event == 'Clock Font':
             window.close()
-            clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
+            clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
         current_time = datetime.datetime.now()
         currentnow = current_time.strftime("%H:%M:%S")
         date = current_time.strftime("%d/%m/%Y")
@@ -431,7 +431,7 @@ def snooze_set(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format):
             window.close()
             main()
 
-def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format):
+def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting):
     sg.theme(theme)   # Add a touch of color
     #Set Home
     home_folder = os.path.expanduser('~')
@@ -461,11 +461,11 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
 
         if event == ' Set Theme ':
             window.close()
-            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
+            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
 
         if event == 'Clock Font':
             window.close()
-            clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
+            clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
         
         if event == ' Snooze Duration ':
             window.close()
@@ -487,7 +487,7 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
             make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
             break
          
-def clock_format(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format):
+def clock_format(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting):
     # Set Clock Format for 12 or 24 hour options
     format_options = ['12', '24']
 
@@ -541,7 +541,7 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
         
         if event == "Saved Alarm or Options":
             window.close()
-            alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format)
+            alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
 
         # Check if alarm values were populated
         if values == locals():
@@ -660,7 +660,7 @@ def main():
     set_time = 'Net Defined'
     window=make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Time_Format, snooze_setting)
 
-def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format):
+def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting):
 
     #Set Home
     home_folder = os.path.expanduser('~')
@@ -692,12 +692,12 @@ def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_F
 
             window.close()
             if alarm_set == False:
-                make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
+                make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
             elif alarm_set == True:
                 alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_Format)
 
 
-def clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format):
+def clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting):
     #when click font change button, open the window its looks like theme window
     #Set Home
     home_folder = os.path.expanduser('~')
@@ -728,7 +728,7 @@ def clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_For
                 yaml.dump(yaml_font, f)
             window.close()
             if alarm_set == False:
-                make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
+                make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
             elif alarm_set == True:
                 alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_Format)
             
