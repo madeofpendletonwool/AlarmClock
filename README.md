@@ -104,10 +104,13 @@ sudo reboot 0
  - [x] Sound function
  - [x] Allow you to choose music/sound to play
  - [x] import of music from a location of choice 
- - [ ] Voice function to tell actual time
+ - [x] Option to select 12 or 24 hour clock
+ - [x] Voice function to tell actual time
  - [ ] Support for music files other than mp3's
  - [ ] Custom Pi image that can be deployed using an img file
  - [ ] Easy setup with package management
+ - [ ] Implement 'Full Screen Mode' to play in better with Raspberry Pi. This will ask on first boot if full screen mode is desired. 
+ - [ ] Check is values are populated (This will prevent crashing)
  - [x] Make theme, previous song choice, and font all write to a yaml file so they continue for each reboot
  - [x] Add a 'Alarm set for:' display after alarm is set
 
