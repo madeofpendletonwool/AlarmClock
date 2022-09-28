@@ -32,7 +32,7 @@ The ansible install is a little more hands on and can be seen a bit of a learnin
 #### **Raspberry Pi Automated Ansible Install:**
 NOTE: No ansible knowledge is really needed. Just run these commands exactly.
 
-Simply get a raspberry pi going with the base 32-bit raspberry pi os on it. Connect it to the internet and ssh into it. Run these commands next.
+Simply get a raspberry pi going with the base 32-bit raspberry pi os on it. Leave the user as the default 'pi'. Connect it to the internet and ssh into it. Run these commands next.
 
 
 Update!
