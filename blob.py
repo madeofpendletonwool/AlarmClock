@@ -1,10 +1,8 @@
 import pyttsx3
+
 engine = pyttsx3.init()
-voices = engine.getProperty('voices')
-print(voices)
-for voice in voices:
-    print(voice, voice.id)
-    engine.setProperty('voice', voice.id)
-    engine.say("Hello world")
-    engine.runAndWait()
-    engine.stop()
+engine.setProperty('rate', 115)
+engine.setProperty('voice', 'english-us')
+
+engine.say('The time is 08:35 PM')
+engine.runAndWait()

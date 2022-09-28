@@ -7,6 +7,7 @@ import yaml
 import tkinter.font
 import os
 import pygame
+import pyttsx3
 from concurrent.futures import ThreadPoolExecutor
 
 snooze_setting = 600
@@ -27,9 +28,19 @@ def now(Set_Format):
 
 
 
-def play_song(playsong, music_status):
+def play_song(playsong, music_status, Set_Format):
 
     if music_status == 'play':
+
+        #Get Current Time
+        wake_current = now(Set_Format)
+
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 115)
+        engine.setProperty('voice', 'english-us')
+
+        engine.say(f'The time is {wake_current}')
+        engine.runAndWait()
 
         pygame.mixer.init()
         pygame.mixer.music.load(playsong)
@@ -40,8 +51,8 @@ def play_song(playsong, music_status):
 
         pygame.mixer.music.pause()
 
-def Wake_Up(song, snooze_setting):
-    play_song(song, 'play')
+def Wake_Up(song, snooze_setting, Set_Format):
+    play_song(song, 'play', Set_Format)
     while True:
         sg.theme('DarkAmber') 
 
@@ -56,11 +67,11 @@ def Wake_Up(song, snooze_setting):
         if event == 'Snooze':
             while True:
 
-                play_song(song, 'pause')
+                play_song(song, 'pause', Set_Format)
                 window.close()
                 time.sleep(snooze_setting)
 
-                play_song(song, 'play')
+                play_song(song, 'play', Set_Format)
 
                 sg.theme('DarkAmber') 
 
@@ -75,7 +86,7 @@ def Wake_Up(song, snooze_setting):
                     window.close()
                     continue
                 else:
-                    play_song(wakesong, 'pause')
+                    play_song(song, 'pause', Set_Format)
                     window.close()
                     main()
         elif event == 'Ok':
@@ -137,13 +148,9 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_For
         current_time = datetime.datetime.now()
         currentnow = current_time.strftime("%H:%M:%S")
         date = current_time.strftime("%d/%m/%Y")
-        print("The Set Date is:",date)
-        print(f"The song is: {song}")
-        print(currentnow)
         if currentnow == set_alarm_timer:
             window.close()
-            print("Time to Wake up")
-            Wake_Up(song, snooze_setting)
+            Wake_Up(song, snooze_setting, Set_Format)
             break
 
 def time_conversion():
@@ -301,7 +308,6 @@ def edit_alarm(edit_alarm_no, theme):
             new_hour_time = values1[1]
             new_min_time = values1[2]
             new_time_section = values1[3]
-            print(values1)
 
             # Conversions to make time work 
             if new_time_section == "PM":
@@ -389,8 +395,11 @@ def Delete_alarm(edit_alarm_no, theme):
         if event == sg.WIN_CLOSED or 'No':
             window.close()
             break
-            
-def snooze_set(theme):
+
+def snooze_set(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format):
+    #Set Home
+    home_folder = os.path.expanduser('~')
+
     snooze_options = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
@@ -401,18 +410,26 @@ def snooze_set(theme):
             ]
         # Create the Window
     window = sg.Window('pyArmClock', layout)
-
+    # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
-        snooze_setting = values[0] * 60
-        if event == 'Ok':
-            window.close()
-            return snooze_setting
-            break
 
-        if event == 'Cancel':
+        #select and click 'OK', change theme value 
+        #and pass over  make_window function it
+        if event == 'Ok':
+            snooze_setting = values[0] * 60
+            print(snooze_setting)
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+                yaml_snooze = yaml.safe_load(f)
+
+            for yaml_snooze['SetSnooze'][0]["Set_Snooze"] in yaml_snooze:
+                yaml_snooze['SetSnooze'][0]["Set_Snooze"] = snooze_setting
+
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
+                yaml.dump(yaml_snooze, f)
+
             window.close()
-            break
+            main()
 
 def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format):
     sg.theme(theme)   # Add a touch of color
@@ -431,14 +448,16 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
         event, values = window.read()
         #Set Song Info
         song = values['Choose Song']
-        with open(f'{home_folder}/pyArmClock/config.yaml') as f:
-            yaml_song = yaml.safe_load(f)
+        if song != '':
 
-        for yaml_song['SetSong'][0]["Song_Location"] in yaml_song:
-            yaml_song['SetSong'][0]["Song_Location"] = song
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+                yaml_song = yaml.safe_load(f)
 
-        with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
-            yaml.dump(yaml_song, f)
+            for yaml_song['SetSong'][0]["Song_Location"] in yaml_song:
+                yaml_song['SetSong'][0]["Song_Location"] = song
+
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
+                yaml.dump(yaml_song, f)
 
         if event == ' Set Theme ':
             window.close()
@@ -449,7 +468,8 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
             clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
         
         if event == ' Snooze Duration ':
-            snooze_setting = snooze_set(theme)
+            window.close()
+            snooze_setting = snooze_set(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format)
 
         if event == 'Clock Format':
             window.close()
@@ -464,7 +484,7 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
 
         if event == 'Ok': # if user closes window or clicks cancel
             window.close()
-            make_window(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format)
+            make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
             break
          
 def clock_format(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format):
@@ -489,7 +509,6 @@ def clock_format(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format):
         #and pass over  make_window function it
         if event == 'OK':
             clock_setting=values[0]
-            print(clock_setting)
             with open(f'{home_folder}/pyArmClock/config.yaml') as f:
                 yaml_format = yaml.safe_load(f)
 
@@ -503,7 +522,7 @@ def clock_format(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format):
             main()
 
 
-def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format):
+def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting):
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
     layout = [  [sg.Text('',key='clocktime',font=(cfont,60),justification='center')],
@@ -525,7 +544,7 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
             alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format)
 
         # Check if alarm values were populated
-        if values == {}:
+        if values == locals():
             sg.theme('DarkAmber')   # Add a touch of color
             # All the stuff inside your window.
             layout = [  [sg.Text('ALARM TIME REQUIRED!!')],
@@ -551,7 +570,12 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
     hour_time = values[0]
     min_time = values[1]
     time_section = values[2]
-    print(values)
+
+    if hour_time == 12 and time_section == 'PM':
+        hour_time = hour_time - 12
+
+    if hour_time == 12 and time_section == 'AM':
+        hour_time = hour_time + 12
 
     # Conversions to make time work 
     if time_section == "PM":
@@ -579,14 +603,12 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
 
 
     set_alarm_timer = f"{hour_convfin}:{min_conv}:{sec_conv}"
-    print(set_alarm_timer)
     Time_Period
-    if 'snooze_setting' not in locals():
-        snooze_setting = 10
     alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_Format)
 
 def config_setup():
     config_location = os.path.expanduser('~') + '/pyArmClock/config.yaml'
+    song_path = os.path.exists(os.path.expanduser('~') + '/pyArmClock/config.yaml')
     with open(config_location, 'a') as f:
         line1 = '---'
         linenew = '\n'
@@ -603,15 +625,17 @@ def config_setup():
         line12 = "  - Time: '08:00:00'"
         line13 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
         line14 = "SetSong:"
-        line15 = "  - Song_Location: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
+        line15 = "  - Song_Location: os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3'"
         line16 = "SetFont:"
         line17 = "  - Set_Font: 'Times New Roman'"
         line18 = "SetTheme:"
         line19 = "  - Set_Theme: 'DarkBrown'"
         line20 = "SetFormat:"
         line21 = "  - Set_Format: '12'"
+        line22 = "SetSnooze:"
+        line23 = "  - Set_Snooze: 600"
 
-        f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21])
+        f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23])
 
 def main():
     # Check if Config File exists and create if not
@@ -630,10 +654,11 @@ def main():
     cfont= alarms['SetFont'][0]['Set_Font']
     theme= alarms['SetTheme'][0]['Set_Theme']
     song = alarms['SetSong'][0]['Song_Location']
+    snooze_setting = alarms['SetSnooze'][0]['Set_Snooze']
     Time_Format = alarms['SetFormat'][0]['Set_Format']
     set_alarm_timer = 'Not Defined'
     set_time = 'Net Defined'
-    window=make_window(theme,cfont, song, alarm_set, set_alarm_timer, Time_Format, set_time)
+    window=make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Time_Format, snooze_setting)
 
 def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format):
 
@@ -665,7 +690,6 @@ def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_F
             with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
                 yaml.dump(yaml_theme, f)
 
-            print(theme)
             window.close()
             if alarm_set == False:
                 make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format)
