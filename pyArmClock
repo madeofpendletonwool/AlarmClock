@@ -53,22 +53,25 @@ def play_song(playsong, music_status, Set_Format):
 
 def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
     play_song(song, 'play', Set_Format)
+    sg.theme(theme)   # Add a touch of color
+        # All the stuff inside your window.
+    layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
+                [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
+                [sg.Push(), sg.Text(f'Time to wake up!'), sg.Push()],
+                [sg.VPush()]
+                
+            ]
+            # Create the Window
+    window = sg.Window('pyArmClock', layout)
+        # Event Loop to process "events" and get the "values" of the inputs
     while True:
-        sg.theme(theme) 
+        event, values = window.read(timeout=10,timeout_key='timeout')
 
-        layout = [  [sg.VPush()],
-                    [sg.Push(), sg.Text('Wake up!', font=(cfont,60)), sg.Push()],
-                    [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
-                    [sg.VPush()]          
-        ]
-        pygame.mixer.pause()
-    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
-    # Event Loop to process "events" and get the "values" of the inputs
-    while True:
-        event, values = window.read()
         if fullscreen_mode == True:
             window.Maximize()
-
+        if event == 'timeout':
+            window['clocktime'].update(now(Set_Format))
         if event == 'Snooze':
             while True:
 
@@ -77,25 +80,32 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                 time.sleep(snooze_setting)
 
                 play_song(song, 'play', Set_Format)
-
-                sg.theme(theme) 
-
-                layout = [  [sg.Text('Wake up!', font=(cfont,60))],
-                    [sg.Button('Ok'), sg.Button('Snooze')]             
-                ]
-                pygame.mixer.pause()
+                sg.theme(theme)   # Add a touch of color
+                    # All the stuff inside your window.
+                layout = [  [sg.VPush()],
+                            [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
+                            [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
+                            [sg.Push(), sg.Text(f'Time to wake up!'), sg.Push()],
+                            [sg.VPush()]
+                            
+                        ]
+                        # Create the Window
                 window = sg.Window('pyArmClock', layout)
+                    # Event Loop to process "events" and get the "values" of the inputs
+                while True:
+                    event, values = window.read(timeout=10,timeout_key='timeout')
 
-                event, values = window.read()
-                if fullscreen_mode == True:
-                    window.Maximize()
-                if event == 'Snooze':
-                    window.close()
-                    continue
-                else:
-                    play_song(song, 'pause', Set_Format)
-                    window.close()
-                    main()
+                    if fullscreen_mode == True:
+                        window.Maximize()
+                    if event == 'timeout':
+                        window['clocktime'].update(now(Set_Format))
+                    if event == 'Snooze':
+                        window.close()
+                        continue
+                    if event == 'Ok':
+                        play_song(song, 'pause', Set_Format)
+                        window.close()
+                        main()
         elif event == 'Ok':
             window.close()
             play_song(song, 'pause', Set_Format)
@@ -458,7 +468,7 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
     home_folder = os.path.expanduser('~')
     # All the stuff inside your window.
     layout = [  [sg.VPush()],
-                [sg.Push(), sg.Button('Saved Alarms'), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3"),)), sg.Button('Clock Format'), sg.Push()],
+                [sg.Push(), sg.Button('Saved Alarms'), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3 *.flac"),)), sg.Button('Clock Format'), sg.Push()],
                 [sg.Push(), sg.Button(' Set Theme '), sg.Button('Clock Font'), sg.Button(' Snooze Duration '), sg.Push()],
                 [sg.Push(), sg.Button('Ok'), sg.Push()],
                 [sg.VPush()]
