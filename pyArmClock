@@ -62,7 +62,7 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                     [sg.VPush()]          
         ]
         pygame.mixer.pause()
-    window = sg.Window('pyArmClock', layout, element_justification='c')
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read()
@@ -465,7 +465,7 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
                 
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout, element_justification='c')
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
@@ -568,7 +568,7 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
                 
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout, element_justification='c')
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
@@ -721,7 +721,7 @@ def first_boot():
                 
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout, element_justification='c')
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read()
