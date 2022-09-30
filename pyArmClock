@@ -51,18 +51,23 @@ def play_song(playsong, music_status, Set_Format):
 
         pygame.mixer.music.pause()
 
-def Wake_Up(song, snooze_setting, Set_Format, theme):
+def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
     play_song(song, 'play', Set_Format)
     while True:
         sg.theme(theme) 
 
-        layout = [  [sg.Text('Wake up!')],
-            [sg.Button('Ok'), sg.Button('Snooze')]             
+        layout = [  [sg.VPush()],
+                    [sg.Push(), sg.Text('Wake up!', font=(cfont,60)), sg.Push()],
+                    [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
+                    [sg.VPush()]          
         ]
         pygame.mixer.pause()
-        window = sg.Window('pyArmClock', layout)
-
+    window = sg.Window('pyArmClock', layout, element_justification='c')
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
         event, values = window.read()
+        if fullscreen_mode == True:
+            window.Maximize()
 
         if event == 'Snooze':
             while True:
@@ -73,15 +78,17 @@ def Wake_Up(song, snooze_setting, Set_Format, theme):
 
                 play_song(song, 'play', Set_Format)
 
-                sg.theme('DarkAmber') 
+                sg.theme(theme) 
 
-                layout = [  [sg.Text('Wake up!')],
+                layout = [  [sg.Text('Wake up!', font=(cfont,60))],
                     [sg.Button('Ok'), sg.Button('Snooze')]             
                 ]
                 pygame.mixer.pause()
                 window = sg.Window('pyArmClock', layout)
 
                 event, values = window.read()
+                if fullscreen_mode == True:
+                    window.Maximize()
                 if event == 'Snooze':
                     window.close()
                     continue
@@ -154,7 +161,7 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_For
         date = current_time.strftime("%d/%m/%Y")
         if currentnow == set_alarm_timer:
             window.close()
-            Wake_Up(song, snooze_setting, Set_Format, theme)
+            Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
             break
 
 def time_conversion():
