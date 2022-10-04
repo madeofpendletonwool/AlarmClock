@@ -63,7 +63,7 @@ sudo reboot 0
 #### **Raspberry Pi Image Install**
 This method is a work in progress
 #### **x86 Computer Install:**
-The intention here is that you can install the alarm clock on anything, regardless of platform or architechture. I may add more options down the road as well for CPU architecture. The instructure are almost the same as with raspberry pi. Just a different playbook. 
+The intention here is that you can install the alarm clock on anything, regardless of platform or architechture. I may add more options down the road as well for CPU architecture. The instructions are almost the same as with raspberry pi. Just a different playbook. 
 
 Also note that while I tried to make this agnostic of distro, package names vary, and you may need to install some packages manaully/change the playbook. Some basic ansible knowledge might be helpful. 
 
