@@ -52,6 +52,8 @@ def play_song(playsong, music_status, Set_Format):
         pygame.mixer.music.pause()
 
 def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
+    snooze_timer = 0
+    snooze_display = 0
     play_song(song, 'play', Set_Format)
     sg.theme(theme)   # Add a touch of color
         # All the stuff inside your window.
@@ -73,11 +75,99 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
         if event == 'timeout':
             window['clocktime'].update(now(Set_Format))
         if event == 'Snooze':
+            window.close()
             while True:
-
+                alarm_time = snooze_setting / 60
+                alarm_timeint = int(alarm_time)
                 play_song(song, 'pause', Set_Format)
+                
+                layout = [  [sg.VPush()],
+                            [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
+                            [sg.Push(), sg.Button('Cancel'), sg.Push()],
+                            [sg.Push(), sg.Text(f'Alarm snooze set for {alarm_timeint} min(s)'), sg.Push()],
+                            [sg.VPush()]
+                            
+                        ]
+                        # Create the Window
+                window = sg.Window('pyArmClock', layout)
+                    # Event Loop to process "events" and get the "values" of the inputs
+                while True:
+                    event, values = window.read(timeout=10,timeout_key='timeout')
+                    if fullscreen_mode == True:
+                        window.Maximize()
+                    if event == 'timeout':
+                        window['clocktime'].update(now(Set_Format))
+                        snooze_timer += 10
+                        snooze_display, alarm_now = alarm_snooze(snooze_timer, snooze_setting)
+                    if event == 'Cancel':
+                        window.close()
+                        main()
+                    if alarm_now == True:
+                        window.close()
+
+                        play_song(song, 'play', Set_Format)
+                        sg.theme(theme)   # Add a touch of color
+                            # All the stuff inside your window.
+                        layout = [  [sg.VPush()],
+                                    [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
+                                    [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
+                                    [sg.Push(), sg.Text(f'Time to wake up!'), sg.Push()],
+                                    [sg.VPush()]
+                                    
+                                ]
+                                # Create the Window
+                        window = sg.Window('pyArmClock', layout)
+                            # Event Loop to process "events" and get the "values" of the inputs
+                        while True:
+                            event, values = window.read(timeout=10,timeout_key='timeout')
+
+                            if fullscreen_mode == True:
+                                window.Maximize()
+                            if event == 'timeout':
+                                window['clocktime'].update(now(Set_Format))
+                            if event == 'Snooze':
+                                window.close()
+                                lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
+                            if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
+                                play_song(song, 'pause', Set_Format)
+                                window.close()
+                                main()
+        elif event == 'Ok':
+            window.close()
+            play_song(song, 'pause', Set_Format)
+            main()
+
+def lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
+    snooze_timer = 0
+    snooze_display = 0
+    while True:
+        alarm_time = snooze_setting / 60
+        alarm_timeint = int(alarm_time)
+        play_song(song, 'pause', Set_Format)
+        
+        layout = [  [sg.VPush()],
+                    [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
+                    [sg.Push(), sg.Button('Cancel'), sg.Push()],
+                    [sg.Push(), sg.Text(f'Alarm snooze set for {alarm_timeint} min(s)'), sg.Push()],
+                    [sg.VPush()]
+                    
+                ]
+                # Create the Window
+        window = sg.Window('pyArmClock', layout)
+            # Event Loop to process "events" and get the "values" of the inputs
+        while True:
+            event, values = window.read(timeout=10,timeout_key='timeout')
+            if fullscreen_mode == True:
+                window.Maximize()
+            if event == 'timeout':
+                window['clocktime'].update(now(Set_Format))
+                snooze_timer += 10
+                snooze_display, alarm_now = alarm_snooze(snooze_timer, snooze_setting)
+            if event == 'Cancel':
                 window.close()
-                time.sleep(snooze_setting)
+                main()
+            if alarm_now == True:
+                window.close()
 
                 play_song(song, 'play', Set_Format)
                 sg.theme(theme)   # Add a touch of color
@@ -101,15 +191,22 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                         window['clocktime'].update(now(Set_Format))
                     if event == 'Snooze':
                         window.close()
-                        continue
-                    if event == 'Ok':
+                        lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
+                    if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
                         play_song(song, 'pause', Set_Format)
                         window.close()
                         main()
-        elif event == 'Ok':
-            window.close()
-            play_song(song, 'pause', Set_Format)
-            main()
+
+def alarm_snooze(snooze_timer, snooze_setting):
+    snooze_math = snooze_setting / 60
+    snooze_conv = snooze_math * 60000
+    alarm_now = False
+    if snooze_timer == int(snooze_conv):
+        alarm_now = True
+    snooze_display = 1
+    return snooze_display, alarm_now
+
+
 
 def clock_during_alarm():
     sg.theme(theme)   # Add a touch of color
@@ -446,7 +543,6 @@ def snooze_set(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fulls
         #and pass over  make_window function it
         if event == 'Ok':
             snooze_setting = values[0] * 60
-            print(snooze_setting)
             with open(f'{home_folder}/pyArmClock/config.yaml') as f:
                 yaml_snooze = yaml.safe_load(f)
 
@@ -639,8 +735,7 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
         hour_strconv = str(hour_conv)
         hour_convfin = "0" + hour_strconv
     else: hour_convfin = str(hour_conv)
-
-    print(f"Got it! I'll wake you up at {hour_temp}:{min_conv} {time_section}")
+    
     set_time = f'{hour_temp}:{min_conv} {time_section}'
 
     current_time = time.localtime()
