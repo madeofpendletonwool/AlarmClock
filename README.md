@@ -10,6 +10,7 @@
   - [Installing](#Installing)
   - [ToDo](#ToDo)
   - [Platform Availability](#Platform-Availability)
+  - [Saving and Config](#Saving-and-Config)
       
 A quick and dirty python based alarm clock with a GUI and alarm saving functionality. Allows for choosing of song/audio that you wake up to and can speak the time before playing the audio. Works great on a raspberry pi as well as other linux based OS's with automated setup using ansible.
 
@@ -110,7 +111,7 @@ sudo reboot 0
  - [x] Add a 'Alarm set for:' display after alarm is set
  - [x] Implement 'Full Screen Mode' to play in better with Raspberry Pi. This will ask on first boot if full screen mode is desired. 
  - [x] Support for music files other than mp3's (Can now also select flac files)
- - [ ] Show next alarm time while snoozed
+ - [x] Show next alarm time while snoozed (shows amount of time snooze duration is set for)
  - [ ] Custom Pi image that can be deployed using an img file
  - [ ] Easy setup with package management
  - [ ] Check is values are populated (This will prevent crashing)
@@ -118,3 +119,7 @@ sudo reboot 0
 ## Platform Availability
 
 Raspberry Pi and x86 Systems 
+
+## Saving and Config
+
+The saving functionality of the app is built using a config file. On first boot the program will ask if you'd like to open in full screen mode or not. Depending on what is chosen the intial config file will be slightly different. To revert back to factory setting and get the prompt for full screen mode again simply delete the config file from /home/{username}/pyArmClock. The config file is also used to save everything that the program needs after full reboot (theme, font, saved alarms, snooze duration, 12 or 24 hour time, and location of previous song choice) so removing that file will also revert all those other settings back to factory. If you'd like to save the config file and move previous settings to a different computer you can by just copying that file and placing it in your /home/{username}/pyArmClock folder of the new computer. 
