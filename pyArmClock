@@ -45,7 +45,7 @@ def play_song(playsong, music_status, Set_Format):
         pygame.mixer.init()
         pygame.mixer.music.load(playsong)
         pygame.mixer.music.set_volume(0.7)
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
 
     elif music_status == 'pause':
 
