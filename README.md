@@ -11,6 +11,7 @@
   - [ToDo](#ToDo)
   - [Platform Availability](#Platform-Availability)
   - [Saving and Config](#Saving-and-Config)
+  - [Pulseaudio Issue](#Pulseaudio-Issue)
       
 A quick and dirty python based alarm clock with a GUI and alarm saving functionality. Allows for choosing of song/audio that you wake up to and can speak the time before playing the audio. Works great on a raspberry pi as well as other linux based OS's with automated setup using ansible.
 
@@ -123,3 +124,30 @@ Raspberry Pi and x86 Systems
 ## Saving and Config
 
 The saving functionality of the app is built using a config file. On first boot the program will ask if you'd like to open in full screen mode or not. Depending on what is chosen the intial config file will be slightly different. To revert back to factory setting and get the prompt for full screen mode again simply delete the config file from /home/{username}/pyArmClock. The config file is also used to save everything that the program needs after full reboot (theme, font, saved alarms, snooze duration, 12 or 24 hour time, and location of previous song choice) so removing that file will also revert all those other settings back to factory. If you'd like to save the config file and move previous settings to a different computer you can by just copying that file and placing it in your /home/{username}/pyArmClock folder of the new computer. 
+
+## Pulseaudio Issue
+
+I recently became aware of an issue occationally happening with pulse audio and the alarm clock stopping system sounds entirely. Unfortunatly, this is an issue with Pulse itself and not something that I can fix in the code. On the bright side however it is an easy fix when it does come up and it also can be fixed on a per-user basis. Also meaning, no sudo needed to fix. 
+
+If you have this issue happen look through your system logs for anything involving pulse audio.
+```
+journalctl | grep pulseaudio
+```
+If you have the issue you'll see logs that throw this error. 
+```
+Oct 17 13:53:48 computername pulseaudio[2093]: Failed to create sink input: sink is suspended.
+Oct 17 13:53:48 computername pulseaudio[2093]: Failed to create sink input: sink is suspended.
+Oct 17 13:53:48 computername pulseaudio[2093]: Failed to create sink input: sink is suspended.
+Oct 17 13:53:48 computername pulseaudio[2093]: Failed to create sink input: sink is suspended.
+```
+To fix it, you can run this command
+```
+systemctl --user mask wireplumber --now
+```
+Sudo not needed as we pass the user flag. Yes, this is masking wireplumber. Which isn't explicitly needed for audio. So keep that in mind. Oh linux audio, the unfixable beast. Another potential fix for some computers comes in the way of editing your default.pa file in /etc/pulse
+If you comment out this line 
+```
+load-module module-suspend-on-idle
+```
+That will fix it for most computers as well. (Might need to reboot for it to take affect.)
+Lastly, the other option could be to just not use pulseaudio. Using pipewire-pulse instead will do it. Which is the main reason why it only happens on some computers. It also only happens with certain versions of pulseaudio. 

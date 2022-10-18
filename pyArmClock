@@ -8,7 +8,6 @@ import tkinter.font
 import os
 import pygame
 import pyttsx3
-from concurrent.futures import ThreadPoolExecutor
 
 snooze_setting = 600
 Time_Period = ("AM", "PM")
@@ -45,7 +44,7 @@ def play_song(playsong, music_status, Set_Format):
         pygame.mixer.init()
         pygame.mixer.music.load(playsong)
         pygame.mixer.music.set_volume(0.7)
-        pygame.mixer.music.play(-1)
+        pygame.mixer.music.play(loops=-1)
 
     elif music_status == 'pause':
 
@@ -132,7 +131,7 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                                 play_song(song, 'pause', Set_Format)
                                 window.close()
                                 main()
-        elif event == 'Ok':
+        elif event == 'Ok' or event == sg.WIN_CLOSED:
             window.close()
             play_song(song, 'pause', Set_Format)
             main()
@@ -348,56 +347,60 @@ def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fulls
                         ]
                     
                 window = sg.Window('pyArmClock', layout)
+                while True:
+                    event, values = window.read()
+                    print(fullscreen_mode)
 
-                event, values = window.read()
+                    # if fullscreen_mode == True:
+                    #     window.Maximize()
 
-                if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
-                    window.close()
-                    main()
+                    if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
+                        window.close()
+                        main()
 
-                if event == f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?':
-                    edit_alarm_no = "Alarm1"
-                    window.close()
-                    edit_alarm(edit_alarm_no, theme)
-                elif event == f'Edit {alarms["Alarm2"][0]["Alarm_Name"]}?':
-                    edit_alarm_no = "Alarm2"
-                    window.close()
-                    edit_alarm(edit_alarm_no, theme)
-                elif event == f'Edit {alarms["Alarm3"][0]["Alarm_Name"]}?':
-                    edit_alarm_no = "Alarm3"
-                    window.close()
-                    edit_alarm(edit_alarm_no, theme)
+                    if event == f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?':
+                        edit_alarm_no = "Alarm1"
+                        window.close()
+                        edit_alarm(edit_alarm_no, theme, fullscreen_mode)
+                    elif event == f'Edit {alarms["Alarm2"][0]["Alarm_Name"]}?':
+                        edit_alarm_no = "Alarm2"
+                        window.close()
+                        edit_alarm(edit_alarm_no, theme, fullscreen_mode)
+                    elif event == f'Edit {alarms["Alarm3"][0]["Alarm_Name"]}?':
+                        edit_alarm_no = "Alarm3"
+                        window.close()
+                        edit_alarm(edit_alarm_no, theme, fullscreen_mode)
 
-                if event == f'Delete {alarms["Alarm1"][0]["Alarm_Name"]}?':
-                    edit_alarm_no = "Alarm1"
-                    window.close()
-                    Delete_alarm(edit_alarm_no, theme)
-                elif event == f'Delete {alarms["Alarm2"][0]["Alarm_Name"]}?':
-                    edit_alarm_no = "Alarm2"
-                    window.close()
-                    Delete_alarm(edit_alarm_no, theme)
-                elif event == f'Delete {alarms["Alarm3"][0]["Alarm_Name"]}?':
-                    edit_alarm_no = "Alarm3"
-                    window.close()
-                    Delete_alarm(edit_alarm_no, theme)
+                    if event == f'Delete {alarms["Alarm1"][0]["Alarm_Name"]}?':
+                        edit_alarm_no = "Alarm1"
+                        window.close()
+                        Delete_alarm(edit_alarm_no, theme, fullscreen_mode)
+                    elif event == f'Delete {alarms["Alarm2"][0]["Alarm_Name"]}?':
+                        edit_alarm_no = "Alarm2"
+                        window.close()
+                        Delete_alarm(edit_alarm_no, theme, fullscreen_mode)
+                    elif event == f'Delete {alarms["Alarm3"][0]["Alarm_Name"]}?':
+                        edit_alarm_no = "Alarm3"
+                        window.close()
+                        Delete_alarm(edit_alarm_no, theme, fullscreen_mode)
 
-                if event == f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?':
-                    window.close()
-                    set_time = reverse_time_conversion(alarms['Alarm1'][1]['Time'])
-                    alarm(alarms['Alarm1'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
-                    break
-                elif event == f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?':
-                    set_time = reverse_time_conversion(alarms['Alarm2'][1]['Time'])
-                    window.close()
-                    alarm(alarms['Alarm2'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
-                    break
-                elif event == f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?':
-                    set_time = reverse_time_conversion(alarms['Alarm3'][1]['Time'])
-                    window.close()
-                    alarm(alarms['Alarm3'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
-                    break
+                    if event == f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?':
+                        window.close()
+                        set_time = reverse_time_conversion(alarms['Alarm1'][1]['Time'])
+                        alarm(alarms['Alarm1'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
+                        break
+                    elif event == f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?':
+                        set_time = reverse_time_conversion(alarms['Alarm2'][1]['Time'])
+                        window.close()
+                        alarm(alarms['Alarm2'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
+                        break
+                    elif event == f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?':
+                        set_time = reverse_time_conversion(alarms['Alarm3'][1]['Time'])
+                        window.close()
+                        alarm(alarms['Alarm3'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
+                        break
 
-def edit_alarm(edit_alarm_no, theme):
+def edit_alarm(edit_alarm_no, theme, fullscreen_mode):
 
     edit_Time_Period = ("AM", "PM")
     edit_Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
@@ -419,6 +422,9 @@ def edit_alarm(edit_alarm_no, theme):
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values1 = window.read()
+
+        if fullscreen_mode == True:
+            window.Maximize()
 
         if event == 'Save':
             window.close()
@@ -475,7 +481,7 @@ def edit_alarm(edit_alarm_no, theme):
             break
             
 
-def Delete_alarm(edit_alarm_no, theme):
+def Delete_alarm(edit_alarm_no, theme, fullscreen_mode):
 
     sg.theme(theme)   # Add a touch of color
     #get home folder
@@ -490,15 +496,17 @@ def Delete_alarm(edit_alarm_no, theme):
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values1 = window.read()
+        if fullscreen_mode == True:
+            window.Maximize()
 
         Reset_Name = "New Alarm"
-        reset_alarm_value = "12:00:00"
+        reset_alarm_value = "08:00:00"
 
 
         if event == 'Yes':
             window.close()
             
-            with open(f'{home_folder}/pyArmClock/alarms.yaml') as f:
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
                 yaml_alarms = yaml.safe_load(f)
 
             for yaml_alarms[edit_alarm_no][0]["Alarm_Name"] in yaml_alarms:
@@ -507,7 +515,7 @@ def Delete_alarm(edit_alarm_no, theme):
             for yaml_alarms[edit_alarm_no][1]["Time"] in yaml_alarms:
                 yaml_alarms[edit_alarm_no][1]["Time"] = reset_alarm_value
 
-            with open(f'{home_folder}/pyArmClock/alarms.yaml', 'w') as f:
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
                 yaml.dump(yaml_alarms, f)
             
             
@@ -558,13 +566,13 @@ def snooze_set(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fulls
             window.close()
             main()
 
-def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode):
+def alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode):
     sg.theme(theme)   # Add a touch of color
     #Set Home
     home_folder = os.path.expanduser('~')
     # All the stuff inside your window.
     layout = [  [sg.VPush()],
-                [sg.Push(), sg.Button('Saved Alarms'), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3 *.flac"),)), sg.Button('Clock Format'), sg.Push()],
+                [sg.Push(), sg.Button('Saved Alarms'), sg.Button('Choose Song'), sg.Button('Clock Format'), sg.Push()],
                 [sg.Push(), sg.Button(' Set Theme '), sg.Button('Clock Font'), sg.Button(' Snooze Duration '), sg.Push()],
                 [sg.Push(), sg.Button('Ok'), sg.Push()],
                 [sg.VPush()]
@@ -578,17 +586,9 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
         if fullscreen_mode == True:
             window.Maximize()
         #Set Song Info
-        song = values['Choose Song']
-        if song != '':
-
-            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
-                yaml_song = yaml.safe_load(f)
-
-            for yaml_song['SetSong'][0]["Song_Location"] in yaml_song:
-                yaml_song['SetSong'][0]["Song_Location"] = song
-
-            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
-                yaml.dump(yaml_song, f)
+        if event == 'Choose Song':
+            window.close()
+            song_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
 
         if event == ' Set Theme ':
             window.close()
@@ -618,6 +618,63 @@ def alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format
             window.close()
             make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
             break
+
+def song_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode):
+    home_folder = os.path.expanduser('~')
+    song = get_song()
+#        song = yaml_song['SetSong'][0]["Song_Location"]
+    sg.theme(theme)   # Add a touch of color
+    #Set Home
+    # All the stuff inside your window.
+    layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text(f'Current Alarm Song is: {song}', key='songchoice'), sg.Push()],
+                [sg.Push(), sg.FileBrowse('Choose Song', file_types=(("MP3 files", "*.mp3 *.flac"),)), sg.Push()],
+                [sg.Push(), sg.Button('Ok'), sg.Push()],
+                [sg.VPush()]
+                
+            ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read(timeout=10,timeout_key='songtimeout')
+        if fullscreen_mode == True:
+            window.Maximize()
+        if event == 'songtimeout':
+            window['songchoice'].update(get_song())
+        #Set Song Info
+        if event == 'Choose Song':
+            window.close()
+            song_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
+
+        song = values['Choose Song']
+        if song != '':
+
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+                yaml_song = yaml.safe_load(f)
+
+            for yaml_song['SetSong'][0]["Song_Location"] in yaml_song:
+                yaml_song['SetSong'][0]["Song_Location"] = song
+
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
+                yaml.dump(yaml_song, f)
+
+        if event == sg.WIN_CLOSED: # if user closes window or clicks cancel
+            window.close()
+            main()
+
+        if event == 'Ok': # if user closes window or clicks cancel
+            window.close()
+            make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
+            break
+
+def get_song():
+    home_folder = os.path.expanduser('~')
+    with open(f'{home_folder}/pyArmClock/config.yaml') as s:
+        alarms = yaml.load(s, Loader=yaml.FullLoader)
+    song = alarms['SetSong'][0]['Song_Location']
+    return song
+
          
 def clock_format(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode):
     # Set Clock Format for 12 or 24 hour options
@@ -680,27 +737,16 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
         event, values = window.read(timeout=10,timeout_key='timeout')
         if fullscreen_mode == True:
             window.Maximize()
+
+        # Check if alarm values were populated
+
         if event == 'timeout':
             window['clocktime'].update(now(Set_Format))
         
         if event == "Saved Alarm or Options":
             window.close()
-            alarm_options(theme, cfont, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
+            alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
 
-        # Check if alarm values were populated
-        if values == locals():
-            sg.theme('DarkAmber')   # Add a touch of color
-            # All the stuff inside your window.
-            layout = [  [sg.Text('ALARM TIME REQUIRED!!')],
-                        [sg.Button('Ok')]
-                        
-                    ]
-
-            # Create the Window
-            window = sg.Window('pyArmClock', layout)
-            if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
-                break
-                window.close()
         #End Alarm Values check
         if event == sg.WIN_CLOSED: # if user closes window or clicks cancel
             window.close()
@@ -708,7 +754,32 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
 
         if event == 'Ok': # if user closes window or clicks cancel
             window.close()
-            break
+            if values[0] and values[1] and values[2]:
+                window.close()
+                break
+            elif not values[0] and not values[1] and not values[2]:
+                sg.theme(theme)   # Add a touch of color
+                # All the stuff inside your window.
+                layout = [  [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
+                            [sg.Text('ALARM TIME REQUIRED!!')],
+                            [sg.Button('Ok')]
+                            
+                        ]
+
+                # Create the Window
+                window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
+                while True:
+                    event, values = window.read(timeout=10,timeout_key='timeout')
+                    if fullscreen_mode == True:
+                        window.Maximize()
+                    if event == 'timeout':
+                        window['clocktime'].update(now(Set_Format))
+                    if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
+                        # break
+                        window.close()
+                        main()
+            # window.close()
+            # break
 
     hour_temp = values[0]
     hour_time = values[0]
@@ -757,15 +828,15 @@ def config_setup(startup_select):
             line1 = '---'
             linenew = '\n'
             line2 = 'Alarm1:'
-            line3 = '  - Alarm_Name: Alarm1'
+            line3 = '  - Alarm_Name: New Alarm'
             line4 = "  - Time: '08:00:00'"
             line5 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
             line6 = 'Alarm2:'
-            line7 = '  - Alarm_Name: Alarm2'
+            line7 = '  - Alarm_Name: New Alarm'
             line8 = "  - Time: '08:00:00'"
             line9 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
             line10 = 'Alarm3:'
-            line11 = '  - Alarm_Name: Alarm3'
+            line11 = '  - Alarm_Name: New Alarm'
             line12 = "  - Time: '08:00:00'"
             line13 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
             line14 = "SetSong:"
@@ -851,6 +922,8 @@ def first_boot():
 
 
 def main():
+    # Establish clock values dictionary
+    values = {0: '', 1: '', 2: ''}
     # Check if first time boot. If it it, ask if program should be fullscreen mode.
     while True:
 
