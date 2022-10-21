@@ -888,6 +888,16 @@ def config_setup(startup_select):
 
 def first_boot():
     sg.theme('darkbrown')   # Add a touch of color
+    # Check if pyArmClock Folder exists in Home dir
+    #python program to check if a directory exists
+    home_folder_create = os.path.expanduser('~')
+    path = f'{home_folder_create}/pyArmClock'
+    # Check whether the specified path exists or not
+    isExist = os.path.exists(path)
+    #printing if the path exists or not
+    print(isExist)
+    if isExist == False:
+       os.makedirs(path)
     # All the stuff inside your window.
     layout = [  [sg.VPush()],
                 [sg.Text("Welcome to pyArmClock! It appears this is the first time you're booting the program.")],
@@ -924,7 +934,7 @@ def first_boot():
 def main():
     # Establish clock values dictionary
     values = {0: '', 1: '', 2: ''}
-    # Check if first time boot. If it it, ask if program should be fullscreen mode.
+    # Check if first time boot. If it is, ask if program should be fullscreen mode.
     while True:
 
         file_exists = os.path.exists(os.path.expanduser('~') + '/pyArmClock/config.yaml')
