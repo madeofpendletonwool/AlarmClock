@@ -848,7 +848,7 @@ def config_setup(startup_select):
             line12 = "  - Time: '08:00:00'"
             line13 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
             line14 = "SetSong:"
-            line15 = "  - Song_Location: os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3'"
+            line15 = f"  - Song_Location: {song_path}"
             line16 = "SetFont:"
             line17 = "  - Set_Font: 'Times New Roman'"
             line18 = "SetTheme:"
@@ -863,7 +863,7 @@ def config_setup(startup_select):
             f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25])
     else: 
         config_location = os.path.expanduser('~') + '/pyArmClock/config.yaml'
-        song_path = os.path.exists(os.path.expanduser('~') + '/pyArmClock/config.yaml')
+        song_path = (os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3')
         with open(config_location, 'a') as f:
             line1 = '---'
             linenew = '\n'
@@ -880,7 +880,7 @@ def config_setup(startup_select):
             line12 = "  - Time: '08:00:00'"
             line13 = "  - Sound: os.path.expanduser('~') + '/pyArmClock/ExampleMusic'"
             line14 = "SetSong:"
-            line15 = "  - Song_Location: os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3'"
+            line15 = f"  - Song_Location: {song_path}"
             line16 = "SetFont:"
             line17 = "  - Set_Font: 'Times New Roman'"
             line18 = "SetTheme:"
@@ -897,15 +897,22 @@ def config_setup(startup_select):
 def first_boot():
     sg.theme('darkbrown')   # Add a touch of color
     # Check if pyArmClock Folder exists in Home dir
+    
     #python program to check if a directory exists
     home_folder_create = os.path.expanduser('~')
     path = f'{home_folder_create}/pyArmClock'
     # Check whether the specified path exists or not
     isExist = os.path.exists(path)
-    #printing if the path exists or not
-    print(isExist)
     if isExist == False:
        os.makedirs(path)
+
+    home_folder_create_music = os.path.expanduser('~')
+    path_music = f'{home_folder_create_music}/pyArmClock/Music'
+    # Check whether the specified path exists or not
+    isExistMusic = os.path.exists(path_music)
+    print(isExistMusic)
+    if isExistMusic == False:
+       os.makedirs(path_music)
     # All the stuff inside your window.
     layout = [  [sg.VPush()],
                 [sg.Text("Welcome to pyArmClock! It appears this is the first time you're booting the program.")],

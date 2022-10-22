@@ -11,6 +11,7 @@
   - [ToDo](#ToDo)
   - [Platform Availability](#Platform-Availability)
   - [Saving and Config](#Saving-and-Config)
+  - [Adding New Music](#adding-new-music)
   - [Pulseaudio Issue](#Pulseaudio-Issue)
       
 A quick and dirty python based alarm clock with a GUI and alarm saving functionality. Allows for choosing of song/audio that you wake up to and can speak the time before playing the audio. Works great on a raspberry pi as well as other linux based OS's with automated setup using ansible.
@@ -115,7 +116,8 @@ sudo reboot 0
  - [x] Show next alarm time while snoozed (shows amount of time snooze duration is set for)
  - [ ] Custom Pi image that can be deployed using an img file
  - [ ] Easy setup with package management
- - [ ] Check is values are populated (This will prevent crashing)
+ - [x] Check is values are populated (This will prevent crashing)
+ - [ ] Load window while voice is telling time
 
 ## Platform Availability
 
@@ -124,6 +126,14 @@ Raspberry Pi and x86 Systems
 ## Saving and Config
 
 The saving functionality of the app is built using a config file. On first boot the program will ask if you'd like to open in full screen mode or not. Depending on what is chosen the intial config file will be slightly different. To revert back to factory setting and get the prompt for full screen mode again simply delete the config file from /home/{username}/pyArmClock. The config file is also used to save everything that the program needs after full reboot (theme, font, saved alarms, snooze duration, 12 or 24 hour time, and location of previous song choice) so removing that file will also revert all those other settings back to factory. If you'd like to save the config file and move previous settings to a different computer you can by just copying that file and placing it in your /home/{username}/pyArmClock folder of the new computer. 
+
+## Adding New Music
+You can add new music to the 'Music' folder that gets created on boot. You can choose music anywhere on your computer but the music folder just makes it easy. You can scp music to that location easy enough by simply scping to the pi assuming it's connected to the internet
+
+```
+scp /location/of/music/you/want/to/copy {username}@{PiIPAddress}:/home/{username}/pyArmClock/Music
+```
+From there when you select your song in the clock settings just choose a song from the music folder
 
 ## Pulseaudio Issue
 
