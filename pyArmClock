@@ -353,7 +353,6 @@ def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fulls
                     window.Maximize()
                 while True:
                     event, values = window.read()
-                    print(fullscreen_mode)
 
                     if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
                         window.close()
@@ -402,7 +401,6 @@ def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fulls
                         break
 
 def edit_alarm(edit_alarm_no, theme, fullscreen_mode):
-    print("alarmedit Start")
 
     edit_Time_Period = ("AM", "PM")
     edit_Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
@@ -910,7 +908,6 @@ def first_boot():
     path_music = f'{home_folder_create_music}/pyArmClock/Music'
     # Check whether the specified path exists or not
     isExistMusic = os.path.exists(path_music)
-    print(isExistMusic)
     if isExistMusic == False:
        os.makedirs(path_music)
     # All the stuff inside your window.
