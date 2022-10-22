@@ -334,25 +334,26 @@ def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fulls
                 rtc2 = reverse_time_conversion(alarms['Alarm2'][1]['Time'])
                 rtc3 = reverse_time_conversion(alarms['Alarm3'][1]['Time'])
             # All the stuff inside your window.
-                layout = [  [sg.Text('Alarm 1:')],
-                            [sg.Text(alarms['Alarm1'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc1)],
-                            [sg.Button(f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm1"][0]["Alarm_Name"]}?')],
-                            [sg.Text('Alarm 2:')],
-                            [sg.Text(alarms['Alarm2'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc2)],
-                            [sg.Button(f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm2"][0]["Alarm_Name"]}?')],
-                            [sg.Text('Alarm 3:')],
-                            [sg.Text(alarms['Alarm3'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc3)],
-                            [sg.Button(f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm3"][0]["Alarm_Name"]}?')],
-                            [sg.Button('Ok')]               
+                layout = [  [sg.VPush()],
+                            [sg.Push(), sg.Text('Alarm 1:'), sg.Push()],
+                            [sg.Push(), sg.Text(alarms['Alarm1'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc1), sg.Push()],
+                            [sg.Push(), sg.Button(f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm1"][0]["Alarm_Name"]}?'), sg.Push()],
+                            [sg.Push(), sg.Text('Alarm 2:'), sg.Push()],
+                            [sg.Push(), sg.Text(alarms['Alarm2'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc2), sg.Push()],
+                            [sg.Push(), sg.Button(f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm2"][0]["Alarm_Name"]}?'), sg.Push()],
+                            [sg.Push(), sg.Text('Alarm 3:'), sg.Push()],
+                            [sg.Push(), sg.Text(alarms['Alarm3'][0]['Alarm_Name']), sg.Text('|'), sg.Text(rtc3), sg.Push()],
+                            [sg.Push(), sg.Button(f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Button(f'Edit {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Button(f'Delete {alarms["Alarm3"][0]["Alarm_Name"]}?'), sg.Push()],
+                            [sg.Push(), sg.Button('Ok'), sg.Push()],
+                            [sg.VPush()]            
                         ]
                     
-                window = sg.Window('pyArmClock', layout)
+                window = sg.Window('pyArmClock', layout, finalize=True)
+                if fullscreen_mode == True:
+                    window.Maximize()
                 while True:
                     event, values = window.read()
                     print(fullscreen_mode)
-
-                    # if fullscreen_mode == True:
-                    #     window.Maximize()
 
                     if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
                         window.close()
@@ -401,6 +402,7 @@ def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fulls
                         break
 
 def edit_alarm(edit_alarm_no, theme, fullscreen_mode):
+    print("alarmedit Start")
 
     edit_Time_Period = ("AM", "PM")
     edit_Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
@@ -410,21 +412,22 @@ def edit_alarm(edit_alarm_no, theme, fullscreen_mode):
     #get home folder
     home_folder = os.path.expanduser('~')
     # All the stuff inside your window.
-    layout = [
-                [sg.Text('New Alarm Name:')],
-                [sg.InputText()],
-                [sg.Text('Alarm Time')],
-                [sg.Combo(edit_Hour), sg.Combo(edit_Min), sg.Combo(edit_Time_Period)],
-                [sg.Button('Save'), sg.Button('Cancel')]               
+    layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text('New Alarm Name:'), sg.Push()],
+                [sg.Push(), sg.InputText(), sg.Push()],
+                [sg.Push(), sg.Text('Alarm Time'), sg.Push()],
+                [sg.Push(), sg.Combo(edit_Hour), sg.Combo(edit_Min), sg.Combo(edit_Time_Period), sg.Push()],
+                [sg.Push(), sg.Button('Save'), sg.Button('Cancel'), sg.Push()],
+                [sg.VPush()]             
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, finalize=True)
+    if fullscreen_mode == True:
+        window.Maximize()
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values1 = window.read()
-
-        if fullscreen_mode == True:
-            window.Maximize()
+        print(fullscreen_mode)
 
         if event == 'Save':
             window.close()
@@ -487,17 +490,18 @@ def Delete_alarm(edit_alarm_no, theme, fullscreen_mode):
     #get home folder
     home_folder = os.path.expanduser('~')
     # All the stuff inside your window.
-    layout = [
-                [sg.Text(f'Are you sure you want to delete {edit_alarm_no}? This will reset it back to defaults.')],
-                [sg.Button('Yes'), sg.Button('No')]               
+    layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text(f'Are you sure you want to delete {edit_alarm_no}? This will reset it back to defaults.'), sg.Push()],
+                [sg.Push(), sg.Button('Yes'), sg.Button('No'), sg.Push()],
+                [sg.VPush()]     
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, finalize=True)
+    if fullscreen_mode == True:
+        window.Maximize()
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values1 = window.read()
-        if fullscreen_mode == True:
-            window.Maximize()
 
         Reset_Name = "New Alarm"
         reset_alarm_value = "08:00:00"
@@ -735,13 +739,14 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
-        if fullscreen_mode == True:
-            window.Maximize()
 
         # Check if alarm values were populated
 
         if event == 'timeout':
             window['clocktime'].update(now(Set_Format))
+
+        if fullscreen_mode == True:
+            window.Maximize()
         
         if event == "Saved Alarm or Options":
             window.close()
@@ -753,31 +758,34 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
             main()
 
         if event == 'Ok': # if user closes window or clicks cancel
-            window.close()
             if values[0] and values[1] and values[2]:
                 window.close()
                 break
-            elif not values[0] and not values[1] and not values[2]:
+            elif not values[0] or not values[1] or not values[2]:
+                window.close()
                 sg.theme(theme)   # Add a touch of color
                 # All the stuff inside your window.
-                layout = [  [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
+                layouterror = [     [sg.VPush()],  
+                            [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                             [sg.Text('ALARM TIME REQUIRED!!')],
-                            [sg.Button('Ok')]
+                            [sg.Button('Ok')],
+                            [sg.VPush()]
                             
                         ]
 
                 # Create the Window
-                window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
+                window1 = sg.Window('pyArmClock', layouterror, element_justification='c', resizable=True)
                 while True:
-                    event, values = window.read(timeout=10,timeout_key='timeout')
+                    event, values = window1.read(timeout=10,timeout_key='timeout')
                     if fullscreen_mode == True:
-                        window.Maximize()
+                        window1.Maximize()
                     if event == 'timeout':
-                        window['clocktime'].update(now(Set_Format))
+                        window1['clocktime'].update(now(Set_Format))
                     if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
                         # break
-                        window.close()
+                        window1.close()
                         main()
+            window.close()
             # window.close()
             # break
 
