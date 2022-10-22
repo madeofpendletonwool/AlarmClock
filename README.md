@@ -117,7 +117,7 @@ sudo reboot 0
  - [ ] Custom Pi image that can be deployed using an img file
  - [ ] Easy setup with package management
  - [x] Check is values are populated (This will prevent crashing)
- - [ ] Load window while voice is telling time
+ - [ ] Scale Clock interface depending on how big the screen it's created on is. 
 
 ## Platform Availability
 
