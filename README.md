@@ -42,6 +42,10 @@ Update!
 ```
 sudo apt update
 ```
+Next, ensure git is installed 
+```
+sudo apt install git
+```
 Install Ansible
 ```
 sudo apt install ansible

@@ -1,0 +1,126 @@
+ - name: Setup Alarm Clock on Raspberry Pi
+  hosts: localhost
+  user: pi
+  become: yes
+
+  tasks:
+
+  - name: "Update cache & Full system update"
+    apt:
+      update_cache: true
+      upgrade: dist
+      cache_valid_time: 3600
+      force_apt_get: true
+
+  - name: Install xorg
+    ansible.builtin.apt:
+      name: xorg
+
+  - name: Install AwesomeWM(backbone for GUI Apps)
+    ansible.builtin.apt:
+      name: awesome
+
+  - name: Install docker
+    ansible.builtin.apt:
+      name: docker.io
+      update_cache: yes
+
+  - name: Install docker-compose
+    ansible.builtin.apt:
+      name: docker-compose
+
+  - name: Install python3 if not already installed
+    ansible.builtin.apt:
+      name: python3
+
+  - name: Install pip
+    ansible.builtin.apt:
+      name: pip
+
+  - name: Install espeak (required for speaking time)
+    ansible.builtin.apt:
+      name: espeak
+
+  - name: Install ffmpeg (required for speaking time)
+    ansible.builtin.apt:
+      name: espeak
+  
+  - name: Install Alarm dependancies - pysimplegui
+    ansible.builtin.pip:
+      name: pysimplegui
+
+  - name: Install Alarm dependancies - tkinter
+    ansible.builtin.pip:
+      name: tk
+
+  - name: Install Alarm dependancies - pygame
+    ansible.builtin.pip:
+      name: pygame
+
+  - name: Install Alarm dependancies - pyyaml
+    ansible.builtin.pip:
+      name: pyyaml
+
+  - name: Install pyttsx3
+    ansible.builtin.pip:
+      name: pyttsx3
+
+  - name: Install apt tkinter
+    ansible.builtin.apt:
+      name: python-tk
+
+  - name: Clone a repo with separate git directory
+    ansible.builtin.git:
+      repo: https://github.com/waveshare/LCD-show.git
+      dest: /home/pi/LCD-show
+      clone: yes
+      update: yes
+    
+  - name: Change file ownership, group and permissions
+    ansible.builtin.file:
+      path: /home/pi/LCD-show/LCD35-show
+      mode: '0777'
+
+# Next - Setup python script to start by default
+
+  - name: Pull Alarm Clock files and verify they are in the home dir for user pi
+    ansible.builtin.git:
+      repo: https://github.com/madeofpendletonwool/pyArmClock.git
+      dest: /home/pi/pyArmClockBoot
+      clone: yes
+      update: yes
+
+  - name: Create Alarm Clock Startup File
+    copy:
+      dest: "/etc/xdg/autostart/pyArmClock.desktop"
+      content: |
+        [Desktop Entry]
+        Type=Application
+        Name=madeofpendletonwools pyArmClock
+        Exec=pyArmClock
+        Terminal=false
+
+  - name: Move alarm file to bin
+    ansible.builtin.copy:
+      src: /home/pi/pyArmClock/pyArmClock
+      dest: /usr/bin/pyArmClock
+      mode: '0777'
+
+  - name: Disable Raspberry Pi OS screen Timeout
+    ansible.builtin.lineinfile:
+      path: /etc/lightdm/lightdm.conf
+      line: xserver-command=X -s 0 dpms
+      create: no
+
+  - name: Disable Raspberry Pi OS screen Timeout
+    ansible.builtin.lineinfile:
+      path: /etc/lightdm/lightdm.conf
+      line: xserver-command=X -s 0 dpms
+      create: no
+
+#Last, install driver for screen. This will kill the connection so it needs to be done last. 
+
+  - name: Install screen drivers
+    ansible.builtin.shell: ./LCD35-show
+    args:
+      chdir: /home/pi/LCD-show
