@@ -103,10 +103,3 @@
       path: /etc/lightdm/lightdm.conf
       line: xserver-command=X -s 0 dpms
       create: no
-
-#Last, install driver for screen. This will kill the connection so it needs to be done last. 
-
-  - name: Install screen drivers
-    ansible.builtin.shell: ./LCD35-show
-    args:
-      chdir: /home/pi/LCD-show
