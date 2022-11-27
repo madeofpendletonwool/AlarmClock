@@ -15,15 +15,29 @@ Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 Min = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60)
 
 def now(Set_Format):
-    if Set_Format == '24':
-        ntime=datetime.datetime.now()
-        nt=ntime.strftime('%H:%M:%S')
-        return nt
-    else: 
-        ntime=datetime.datetime.now()
-        nt_24=ntime.strftime('%H:%M:%S')
-        nt = reverse_time_conversion(nt_24)
-        return nt
+    home_folder = os.path.expanduser('~')
+    with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+        TimePull = yaml.load(f, Loader=yaml.FullLoader)
+
+    #preset font and theme
+    alarm_set=False
+    SetMode = TimePull['TimeSet'][0]['TimeSet']
+
+    if SetMode == 'Automatic':
+
+        if Set_Format == '24':
+            ntime=datetime.datetime.now()
+            nt=ntime.strftime('%H:%M:%S')
+            return nt
+        else: 
+            ntime=datetime.datetime.now()
+            nt_24=ntime.strftime('%H:%M:%S')
+            nt = reverse_time_conversion(nt_24)
+            return nt
+
+    elif SetMode == 'Manual':
+
+        print('test')
 
 
 
@@ -857,8 +871,10 @@ def config_setup(startup_select):
             line23 = "  - Set_Snooze: 600"
             line24 = "FullscreenMode:"
             line25 = "  - FullscreenMode: True"
+            line26 = "TimeSet:"
+            line27 = "  - TimeSet: Automatic"
 
-            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25])
+            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27])
     else: 
         config_location = os.path.expanduser('~') + '/pyArmClock/config.yaml'
         song_path = (os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3')
@@ -889,8 +905,10 @@ def config_setup(startup_select):
             line23 = "  - Set_Snooze: 600"
             line24 = "FullscreenMode:"
             line25 = "  - FullscreenMode: False"
+            line26 = "TimeSet:"
+            line27 = "  - TimeSet: Automatic"
 
-            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25])
+            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27])
 
 def first_boot():
     sg.theme('darkbrown')   # Add a touch of color
