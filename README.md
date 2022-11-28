@@ -123,6 +123,7 @@ sudo reboot 0
  - [ ] Easy setup with package management
  - [ ] Implement current date on the main clock screen
  - [ ] Implement custom alarm messages 
+ - [ ] Add a check to ensure a song is set. Currently, it's possibly to start an alarm without a song location set. Causing a crash
  - [x] Check is values are populated (This will prevent crashing)
  - [x] Scale Clock interface depending on how big the screen it's created on is. 
 
