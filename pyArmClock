@@ -1121,7 +1121,7 @@ def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_F
     sg.theme(theme)   # Add a touch of color
     layout = [  [sg.VPush()],
                 [sg.Push(), sg.Text('Theme Browsing'), sg.Push()],
-                [sg.Push(), sg.Text('click theme color'), sg.Push()],
+                [sg.Push(), sg.Text('Please Choose Theme'), sg.Push()],
                 [sg.Push(), sg.Combo(values=sg.theme_list(),size=(20,12),key='-LIST-',readonly=True), sg.Push()],
                 [sg.Push(), sg.OK(),sg.Cancel(), sg.Push()],
                 [sg.VPush()]
