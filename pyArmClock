@@ -78,13 +78,14 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                 
             ]
             # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
         # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
 
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
         if event == 'timeout':
             window['clocktime'].update(now(Set_Format))
         if event == 'Snooze':
@@ -108,6 +109,7 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                     event, values = window.read(timeout=10,timeout_key='timeout')
                     if fullscreen_mode == True:
                         window.Maximize()
+                        window.TKroot["cursor"] = "none"
                     if event == 'timeout':
                         window['clocktime'].update(now(Set_Format))
                         snooze_timer += 10
@@ -136,6 +138,7 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
 
                             if fullscreen_mode == True:
                                 window.Maximize()
+                                window.TKroot["cursor"] = "none"
                             if event == 'timeout':
                                 window['clocktime'].update(now(Set_Format))
                             if event == 'Snooze':
@@ -166,12 +169,13 @@ def lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
                     
                 ]
                 # Create the Window
-        window = sg.Window('pyArmClock', layout)
+        window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
             # Event Loop to process "events" and get the "values" of the inputs
         while True:
             event, values = window.read(timeout=10,timeout_key='timeout')
             if fullscreen_mode == True:
                 window.Maximize()
+                window.TKroot["cursor"] = "none"
             if event == 'timeout':
                 window['clocktime'].update(now(Set_Format))
                 snooze_timer += 10
@@ -200,6 +204,7 @@ def lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
 
                     if fullscreen_mode == True:
                         window.Maximize()
+                        window.TKroot["cursor"] = "none"
                     if event == 'timeout':
                         window['clocktime'].update(now(Set_Format))
                     if event == 'Snooze':
@@ -234,7 +239,7 @@ def clock_during_alarm():
                 
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
@@ -259,12 +264,13 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_For
                 
             ]
             # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
         # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
         if event == 'timeout':
             window['clocktime'].update(now(Set_Format))
         if event == 'Cancel Set Alarm':
@@ -272,7 +278,7 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_For
             main()
         if event == 'Set Theme':
             window.close()
-            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
+            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode, screen_size)
         if event == 'Clock Font':
             window.close()
             clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
@@ -362,9 +368,10 @@ def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fulls
                             [sg.VPush()]            
                         ]
                     
-                window = sg.Window('pyArmClock', layout, finalize=True)
+                window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True, finalize=True)
                 if fullscreen_mode == True:
                     window.Maximize()
+                    window.TKroot["cursor"] = "none"
                 while True:
                     event, values = window.read()
 
@@ -433,9 +440,10 @@ def edit_alarm(edit_alarm_no, theme, fullscreen_mode):
                 [sg.VPush()]             
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout, finalize=True)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True, finalize=True)
     if fullscreen_mode == True:
         window.Maximize()
+        window.TKroot["cursor"] = "none"
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values1 = window.read()
@@ -508,9 +516,10 @@ def Delete_alarm(edit_alarm_no, theme, fullscreen_mode):
                 [sg.VPush()]     
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout, finalize=True)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True, finalize=True)
     if fullscreen_mode == True:
         window.Maximize()
+        window.TKroot["cursor"] = "none"
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values1 = window.read()
@@ -556,12 +565,13 @@ def snooze_set(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fulls
                 
             ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
 
         #select and click 'OK', change theme value 
         #and pass over  make_window function it
@@ -601,6 +611,7 @@ def alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_
         event, values = window.read(timeout=10,timeout_key='timeout')
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
         #Set Song Info
         if event == 'Choose Song':
             window.close()
@@ -656,6 +667,7 @@ def song_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
         event, values = window.read(timeout=10,timeout_key='songtimeout')
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
         if event == 'songtimeout':
             window['songchoice'].update(get_song())
         #Set Song Info
@@ -707,12 +719,13 @@ def clock_format(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_F
                 [sg.VPush()]
         ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
 
         #select and click 'OK', change theme value 
         #and pass over  make_window function it
@@ -759,6 +772,7 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
 
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
         
         if event == "Saved Alarm or Options":
             window.close()
@@ -791,6 +805,7 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
                     event, values = window1.read(timeout=10,timeout_key='timeout')
                     if fullscreen_mode == True:
                         window1.Maximize()
+                        window.TKroot["cursor"] = "none"
                     if event == 'timeout':
                         window1['clocktime'].update(now(Set_Format))
                     if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
@@ -873,8 +888,10 @@ def config_setup(startup_select):
             line25 = "  - FullscreenMode: True"
             line26 = "TimeSet:"
             line27 = "  - TimeSet: Automatic"
+            line28 = "ScreenSize:"
+            line29 = "  - ScreenSize: NoneSet"
 
-            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27])
+            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27, linenew, line28, linenew, line29])
     else: 
         config_location = os.path.expanduser('~') + '/pyArmClock/config.yaml'
         song_path = (os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3')
@@ -907,8 +924,10 @@ def config_setup(startup_select):
             line25 = "  - FullscreenMode: False"
             line26 = "TimeSet:"
             line27 = "  - TimeSet: Automatic"
+            line28 = "ScreenSize:"
+            line29 = "  - ScreenSize: NoneSet"
 
-            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27])
+            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27, linenew, line28, linenew, line29])
 
 def first_boot():
     sg.theme('darkbrown')   # Add a touch of color
@@ -1007,12 +1026,13 @@ def theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_F
                 [sg.VPush()]
         ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
 
         #select and click 'OK', change theme value 
         #and pass over  make_window function it
@@ -1052,12 +1072,13 @@ def clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_For
                 [sg.VPush()]
         ]
         # Create the Window
-    window = sg.Window('pyArmClock', layout)
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
         if fullscreen_mode == True:
             window.Maximize()
+            window.TKroot["cursor"] = "none"
 
         #change font value and pass over make_window function it
         if event == 'OK':
