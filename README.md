@@ -12,6 +12,7 @@
   - [Platform Availability](#Platform-Availability)
   - [Saving and Config](#Saving-and-Config)
   - [Adding New Music](#adding-new-music)
+  - [Manual Time Entry](#manual-time-entry)
   - [Pulseaudio Issue](#Pulseaudio-Issue)
       
 A quick and dirty python based alarm clock with a GUI and alarm saving functionality. Allows for choosing of song/audio that you wake up to and can speak the time before playing the audio. Works great on a raspberry pi as well as other linux based OS's with automated setup using ansible.
@@ -120,8 +121,10 @@ sudo reboot 0
  - [x] Show next alarm time while snoozed (shows amount of time snooze duration is set for)
  - [ ] Custom Pi image that can be deployed using an img file
  - [ ] Easy setup with package management
+ - [ ] Implement current date on the main clock screen
+ - [ ] Implement custom alarm messages 
  - [x] Check is values are populated (This will prevent crashing)
- - [ ] Scale Clock interface depending on how big the screen it's created on is. 
+ - [x] Scale Clock interface depending on how big the screen it's created on is. 
 
 ## Platform Availability
 
@@ -138,6 +141,12 @@ You can add new music to the 'Music' folder that gets created on boot. You can c
 scp /location/of/music/you/want/to/copy {username}@{PiIPAddress}:/home/{username}/pyArmClock/Music
 ```
 From there when you select your song in the clock settings just choose a song from the music folder
+
+## Manual Time Entry
+
+pyArmClock gets it's time automatically from the system. However, you may not have the system connected to the internet considering it's an alarm clock. In such a case, I've implemented the ability to set the time manually. You can do this in the alarm options. 
+
+One thing to note is that this is essentially only temporarily changing the time. The next time the system is connected to the internet it will fix itself. It will also do nothing if the system is connected to the internet already. 
 
 ## Pulseaudio Issue
 
