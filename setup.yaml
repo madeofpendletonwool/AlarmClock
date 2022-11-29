@@ -61,18 +61,6 @@
     ansible.builtin.apt:
       name: python-tk
 
-  - name: Clone a repo with separate git directory
-    ansible.builtin.git:
-      repo: https://github.com/waveshare/LCD-show.git
-      dest: /home/pi/LCD-show
-      clone: yes
-      update: yes
-    
-  - name: Change file ownership, group and permissions
-    ansible.builtin.file:
-      path: /home/pi/LCD-show/LCD35-show
-      mode: '0777'
-
 # Next - Setup python script to start by default
 
   - name: Pull Alarm Clock files and verify they are in the home dir for user pi
