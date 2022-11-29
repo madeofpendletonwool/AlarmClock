@@ -29,9 +29,41 @@ A quick and dirty python based alarm clock with a GUI and alarm saving functiona
 
 ## Installing
 
-#### There's two options for instalation on a Raspberry Pi - Automated with Ansible and install an image directly to an sd card
+#### There's two options for instalation on a Raspberry Pi - Automated with Ansible and install an image directly to an sd card. For an easy and painless install go the image direct option.
 
-The ansible install is a little more hands on and can be seen a bit of a learning experience. They both work great though. 
+The ansible install is a little more hands on and can be seen as a bit of a learning experience. They both work great though and instructions are provided for both below. 
+
+#### **Raspberry Pi Image Install**
+
+This method is now available!
+
+From now on as I update the alarm clock I'll release a new edition of the raspberry pi image along side it.
+
+1. To install using the reaspberry pi image download the pyArmClock.img.tz file from the latest release. 
+
+2. Next, I recommend using the raspberry pi imager tool to install the os on an sd card. You can download it [here](https://www.raspberrypi.com/software/) or install it using package management if on linux. 
+
+3. Once opened you should see a window like this
+<img src="./images/imager.png">
+Select the "Choose OS" option. On the botton you should see a "Use Custom" option. Select that, and then select the pyArmClock.img.tz file from where it got downloaded to on your computer. 
+<img src="./images/custom.png">
+
+4. Now choose your storage, simply an SD card you'd like to install pyArmClock to. Note: Your SD card must be at least 11GB for it to work. 
+
+5. Now write!
+
+6. Once completed, plug the SD card into your raspberry pi and boot it up. pyArmClock will immediately boot upon the desktop starting up. Select 'yes' on the first prompt to go full screen from here on out.
+
+Additional Information:
+Default Username: pi
+Default Password: pyArmClock
+Some final information on this option. By default, the time will set itself using the internet. You may need to adjust the time zone depending on where you are. To do this you can ssh into your pi while it's online. If you scan your network it will show up as 'pyarmclock.local'. Login and then run 
+```
+sudo raspi-config
+```
+From here you can make typical system changes. Time Zone settings are under 'localisation options'.
+
+If you'd rather run without internet you can manually adjust the time from within pyArmClock.
 
 #### **Raspberry Pi Automated Ansible Install:**
 NOTE: No ansible knowledge is really needed. Just run these commands exactly.
@@ -67,8 +99,6 @@ Reboot!
 ```
 sudo reboot 0
 ```
-#### **Raspberry Pi Image Install**
-This method is a work in progress
 #### **x86 Computer Install:**
 The intention here is that you can install the alarm clock on anything, regardless of platform or architechture. I may add more options down the road as well for CPU architecture. The instructions are almost the same as with raspberry pi. Just a different playbook. 
 
@@ -119,7 +149,7 @@ sudo reboot 0
  - [x] Implement 'Full Screen Mode' to play in better with Raspberry Pi. This will ask on first boot if full screen mode is desired. 
  - [x] Support for music files other than mp3's (Can now also select flac files)
  - [x] Show next alarm time while snoozed (shows amount of time snooze duration is set for)
- - [ ] Custom Pi image that can be deployed using an img file
+ - [x] Custom Pi image that can be deployed using an img file
  - [ ] Easy setup with package management
  - [ ] Implement current date on the main clock screen
  - [ ] Implement custom alarm messages 
