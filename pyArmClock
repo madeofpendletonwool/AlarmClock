@@ -14,30 +14,37 @@ Time_Period = ("AM", "PM")
 Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 Min = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60)
 
-def now(Set_Format):
-    home_folder = os.path.expanduser('~')
-    with open(f'{home_folder}/pyArmClock/config.yaml') as f:
-        TimePull = yaml.load(f, Loader=yaml.FullLoader)
+def now(Set_Format, timetype):
+    if timetype == 'time':
 
-    #preset font and theme
-    alarm_set=False
-    SetMode = TimePull['TimeSet'][0]['TimeSet']
+        home_folder = os.path.expanduser('~')
+        with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+            TimePull = yaml.load(f, Loader=yaml.FullLoader)
 
-    if SetMode == 'Automatic':
+        #preset font and theme
+        alarm_set=False
+        SetMode = TimePull['TimeSet'][0]['TimeSet']
 
-        if Set_Format == '24':
-            ntime=datetime.datetime.now()
-            nt=ntime.strftime('%H:%M:%S')
-            return nt
-        else: 
-            ntime=datetime.datetime.now()
-            nt_24=ntime.strftime('%H:%M:%S')
-            nt = reverse_time_conversion(nt_24)
-            return nt
+        if SetMode == 'Automatic':
 
-    elif SetMode == 'Manual':
+            if Set_Format == '24':
+                ntime=datetime.datetime.now()
+                nt=ntime.strftime('%H:%M:%S')
+                return nt
+            else: 
+                ntime=datetime.datetime.now()
+                nt_24=ntime.strftime('%H:%M:%S')
+                nt = reverse_time_conversion(nt_24)
+                return nt
 
-        print('test')
+        elif SetMode == 'Manual':
+
+            print('test')
+    elif timetype == 'date':
+
+        today = datetime.date.today()
+        nt = today.strftime("%B %d, %Y")
+        return nt
 
 
 
@@ -46,7 +53,7 @@ def play_song(playsong, music_status, Set_Format):
     if music_status == 'play':
 
         #Get Current Time
-        wake_current = now(Set_Format)
+        wake_current = now(Set_Format, 'time')
 
         engine = pyttsx3.init()
         engine.setProperty('rate', 115)
@@ -71,6 +78,7 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
     sg.theme(theme)   # Add a touch of color
         # All the stuff inside your window.
     layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                 [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                 [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
                 [sg.Push(), sg.Text(f'Time to wake up!'), sg.Push()],
@@ -87,7 +95,8 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
             window.Maximize()
             window.TKroot["cursor"] = "none"
         if event == 'timeout':
-            window['clocktime'].update(now(Set_Format))
+            window['clocktime'].update(now(Set_Format, 'time'))
+            window['date'].update(now(Set_Format, 'date'))
         if event == 'Snooze':
             window.close()
             while True:
@@ -96,6 +105,7 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                 play_song(song, 'pause', Set_Format)
                 
                 layout = [  [sg.VPush()],
+                            [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                             [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                             [sg.Push(), sg.Button('Cancel'), sg.Push()],
                             [sg.Push(), sg.Text(f'Alarm snooze set for {alarm_timeint} min(s)'), sg.Push()],
@@ -111,7 +121,8 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                         window.Maximize()
                         window.TKroot["cursor"] = "none"
                     if event == 'timeout':
-                        window['clocktime'].update(now(Set_Format))
+                        window['clocktime'].update(now(Set_Format, 'time'))
+                        window['date'].update(now(Set_Format, 'date'))
                         snooze_timer += 10
                         snooze_display, alarm_now = alarm_snooze(snooze_timer, snooze_setting)
                     if event == 'Cancel':
@@ -124,6 +135,7 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                         sg.theme(theme)   # Add a touch of color
                             # All the stuff inside your window.
                         layout = [  [sg.VPush()],
+                                    [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                                     [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                                     [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
                                     [sg.Push(), sg.Text(f'Time to wake up!'), sg.Push()],
@@ -140,7 +152,8 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
                                 window.Maximize()
                                 window.TKroot["cursor"] = "none"
                             if event == 'timeout':
-                                window['clocktime'].update(now(Set_Format))
+                                window['clocktime'].update(now(Set_Format, 'time'))
+                                window['date'].update(now(Set_Format, 'date'))
                             if event == 'Snooze':
                                 window.close()
                                 lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
@@ -162,6 +175,7 @@ def lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
         play_song(song, 'pause', Set_Format)
         
         layout = [  [sg.VPush()],
+                    [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                     [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                     [sg.Push(), sg.Button('Cancel'), sg.Push()],
                     [sg.Push(), sg.Text(f'Alarm snooze set for {alarm_timeint} min(s)'), sg.Push()],
@@ -177,7 +191,8 @@ def lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
                 window.Maximize()
                 window.TKroot["cursor"] = "none"
             if event == 'timeout':
-                window['clocktime'].update(now(Set_Format))
+                window['clocktime'].update(now(Set_Format, 'time'))
+                window['date'].update(now(Set_Format, 'date'))
                 snooze_timer += 10
                 snooze_display, alarm_now = alarm_snooze(snooze_timer, snooze_setting)
             if event == 'Cancel':
@@ -190,6 +205,7 @@ def lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
                 sg.theme(theme)   # Add a touch of color
                     # All the stuff inside your window.
                 layout = [  [sg.VPush()],
+                            [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                             [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                             [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
                             [sg.Push(), sg.Text(f'Time to wake up!'), sg.Push()],
@@ -206,7 +222,8 @@ def lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
                         window.Maximize()
                         window.TKroot["cursor"] = "none"
                     if event == 'timeout':
-                        window['clocktime'].update(now(Set_Format))
+                        window['clocktime'].update(now(Set_Format, 'time'))
+                        window['date'].update(now(Set_Format, 'date'))
                     if event == 'Snooze':
                         window.close()
                         lazy_snooze(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont)
@@ -229,7 +246,8 @@ def alarm_snooze(snooze_timer, snooze_setting):
 def clock_during_alarm():
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
-    layout = [  [sg.Text('',key='clocktime',font=(cfont,60),justification='center')],
+    layout = [  [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
+                [sg.Text('',key='clocktime',font=(cfont,60),justification='center')],
                 [sg.Text('When Would you like to wake up?')],
                 [sg.Text('Select Time:')],
                 [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period)],
@@ -244,7 +262,8 @@ def clock_during_alarm():
     while True:
         event, values = window.read(timeout=10,timeout_key='timeout')
         if event == 'timeout':
-            window['clocktime'].update(now())
+            window['clocktime'].update(now(Set_Format, 'time'))
+            window['date'].update(now(Set_Format, 'date'))
 
         if event == 'Set Theme':
             theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting)
@@ -257,6 +276,7 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_For
     sg.theme(theme)   # Add a touch of color
         # All the stuff inside your window.
     layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                 [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                 [sg.Push(), sg.Button('Cancel Set Alarm'), sg.Button('Set Theme'), sg.Button('Clock Font'), sg.Push()],
                 [sg.Push(), sg.Text(f'Alarm Currrently Set for: {set_time}'), sg.Push()],
@@ -272,7 +292,8 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_For
             window.Maximize()
             window.TKroot["cursor"] = "none"
         if event == 'timeout':
-            window['clocktime'].update(now(Set_Format))
+            window['clocktime'].update(now(Set_Format, 'time'))
+            window['date'].update(now(Set_Format, 'date'))
         if event == 'Cancel Set Alarm':
             window.close()
             main()
@@ -688,6 +709,7 @@ def time_set(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Forma
                 sg.theme(theme)   # Add a touch of color
                 # All the stuff inside your window.
                 layouterror = [     [sg.VPush()],  
+                            [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                             [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                             [sg.Text('ALARM TIME REQUIRED!!')],
                             [sg.Button('Ok')],
@@ -702,7 +724,8 @@ def time_set(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Forma
                     if fullscreen_mode == True:
                         window1.Maximize()
                     if event == 'timeout':
-                        window1['clocktime'].update(now(Set_Format))
+                        window['clocktime'].update(now(Set_Format, 'time'))
+                        window['date'].update(now(Set_Format, 'date'))
                     if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
                         # break
                         window1.close()
@@ -854,6 +877,7 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
     sg.theme(theme)   # Add a touch of color
     # All the stuff inside your window.
     layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                 [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                 [sg.Text('When would you like to wake up?'), sg.Text('Select Time:')],
                 [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period), sg.Button('Ok')],
@@ -870,7 +894,8 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
         # Check if alarm values were populated
 
         if event == 'timeout':
-            window['clocktime'].update(now(Set_Format))
+            window['clocktime'].update(now(Set_Format, 'time'))
+            window['date'].update(now(Set_Format, 'date'))
 
         if fullscreen_mode == True:
             window.Maximize()
@@ -894,6 +919,7 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
                 sg.theme(theme)   # Add a touch of color
                 # All the stuff inside your window.
                 layouterror = [     [sg.VPush()],  
+                            [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                             [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                             [sg.Text('ALARM TIME REQUIRED!!')],
                             [sg.Button('Ok')],
@@ -908,7 +934,8 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
                     if fullscreen_mode == True:
                         window1.Maximize()
                     if event == 'timeout':
-                        window1['clocktime'].update(now(Set_Format))
+                        window['date'].update(now(Set_Format, 'date'))
+                        window['clocktime'].update(now(Set_Format, 'time'))
                     if event == sg.WIN_CLOSED or event == 'Ok': # if user closes window or clicks cancel
                         # break
                         window1.close()
