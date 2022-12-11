@@ -154,6 +154,7 @@ sudo reboot 0
  - [x] Implement current date on the main clock screen
  - [ ] Implement custom alarm messages 
  - [ ] Add a check to ensure a song is set. Currently, it's possibly to start an alarm without a song location set. Causing a crash
+ - [ ] Additional Customization options. Layout of date for example. 
  - [x] Check is values are populated (This will prevent crashing)
  - [x] Scale Clock interface depending on how big the screen it's created on is. 
 
