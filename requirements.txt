@@ -1,0 +1,7 @@
+time
+datetime
+PySimpleGUI
+yaml
+tkinter
+pygame
+pyttsx3
