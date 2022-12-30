@@ -299,7 +299,7 @@ def alarm(set_alarm_timer, song, snooze_setting, theme, cfont, set_time, Set_For
             main()
         if event == 'Set Theme':
             window.close()
-            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode, screen_size)
+            theme_choose(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
         if event == 'Clock Font':
             window.close()
             clock_font(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
@@ -361,7 +361,7 @@ def reverse_time_conversion(alarm_convert):
     rev_time_convert = f'{num_rev_hourconv1}:{num_rev_minconv} {rev_time_period}'
     return rev_time_convert
 
-def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fullscreen_mode):
+def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fullscreen_mode, screen_size):
         while True:
             sg.theme(theme)   # Add a touch of color
             #get home folder
@@ -429,17 +429,17 @@ def alarm_select(theme, song, snooze_setting, cfont, set_time, Set_Format, fulls
                     if event == f'Wake up to {alarms["Alarm1"][0]["Alarm_Name"]}?':
                         window.close()
                         set_time = reverse_time_conversion(alarms['Alarm1'][1]['Time'])
-                        alarm(alarms['Alarm1'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
+                        alarm(alarms['Alarm1'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode, screen_size)
                         break
                     elif event == f'Wake up to {alarms["Alarm2"][0]["Alarm_Name"]}?':
                         set_time = reverse_time_conversion(alarms['Alarm2'][1]['Time'])
                         window.close()
-                        alarm(alarms['Alarm2'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
+                        alarm(alarms['Alarm2'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode, screen_size)
                         break
                     elif event == f'Wake up to {alarms["Alarm3"][0]["Alarm_Name"]}?':
                         set_time = reverse_time_conversion(alarms['Alarm3'][1]['Time'])
                         window.close()
-                        alarm(alarms['Alarm3'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode)
+                        alarm(alarms['Alarm3'][1]['Time'], song, snooze_setting, theme, cfont, set_time, Set_Format, fullscreen_mode, screen_size)
                         break
 
 def edit_alarm(edit_alarm_no, theme, fullscreen_mode):
@@ -622,6 +622,7 @@ def alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_
                 [sg.Push(), sg.Button('Manually Set Clock Time - (Manual config If Using Offline)'), sg.Push()],
                 [sg.Push(), sg.Button('Saved Alarms'), sg.Button('Choose Song'), sg.Button('Clock Format'), sg.Push()],
                 [sg.Push(), sg.Button(' Set Theme '), sg.Button('Clock Font'), sg.Button(' Snooze Duration '), sg.Push()],
+                [sg.Push(), sg.Button('Time Speak Settings'), sg.Push()],
                 [sg.Push(), sg.Button('Ok'), sg.Push()],
                 [sg.VPush()]
                 
@@ -655,6 +656,10 @@ def alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_
             window.close()
             snooze_setting = snooze_set(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fullscreen_mode)
 
+        if event == 'Time Speak Settings':
+            window.close()
+            speak_settings(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fullscreen_mode)
+
         if event == 'Clock Format':
             window.close()
             clock_format(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
@@ -671,6 +676,49 @@ def alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_
             window.close()
             make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
             break
+
+def speak_settings(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fullscreen_mode):
+    # Set Clock Format for 12 or 24 hour options
+    speak_options = ['Enabled', 'Disabled']
+
+    #Set Home
+    home_folder = os.path.expanduser('~')
+
+    sg.theme(theme)   # Add a touch of color
+    layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text('Should the automated voice that tells the time be enabled?'), sg.Push()],
+                [sg.Push(), sg.Combo(speak_options), sg.Push()],
+                [sg.Push(), sg.OK(), sg.Cancel(), sg.Push()],
+                [sg.VPush()]
+        ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read(timeout=10,timeout_key='timeout')
+        if fullscreen_mode == True:
+            window.Maximize()
+            window.TKroot["cursor"] = "none"
+
+        #select and click 'OK', change theme value 
+        #and pass over  make_window function it
+        if event == 'OK':
+            autospeak_setting=values[0]
+            with open(f'{home_folder}/pyArmClock/config.yaml') as f:
+                yaml_format = yaml.safe_load(f)
+
+            for yaml_format['VoiceSetting'][0]["VoiceSetting"] in yaml_format:
+                yaml_format['VoiceSetting'][0]["VoiceSetting"] = autospeak_setting
+
+            with open(f'{home_folder}/pyArmClock/config.yaml', 'w') as f:
+                yaml.dump(yaml_format, f)
+
+            window.close()
+            main()
+                #End Alarm Values check
+        if event == "Cancel" or event == sg.WIN_CLOSED: # if user closes window or clicks cancel
+            window.close()
+            main()
 
 def time_set(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode):
     song = get_song()
@@ -1018,8 +1066,10 @@ def config_setup(startup_select):
             line27 = "  - TimeSet: Automatic"
             line28 = "ScreenSize:"
             line29 = "  - ScreenSize: NoneSet"
+            line30 = "VoiceSetting:"
+            line31 = "  - VoiceSetting: Enabled"
 
-            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27, linenew, line28, linenew, line29])
+            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27, linenew, line28, linenew, line29, linenew, line30, linenew, line31])
     else: 
         config_location = os.path.expanduser('~') + '/pyArmClock/config.yaml'
         song_path = (os.path.expanduser('~') + '/pyArmClock/ExampleMusic/UpInSpace.mp3')
@@ -1054,8 +1104,10 @@ def config_setup(startup_select):
             line27 = "  - TimeSet: Automatic"
             line28 = "ScreenSize:"
             line29 = "  - ScreenSize: NoneSet"
+            line30 = "VoiceSetting:"
+            line31 = "  - VoiceSetting: Enabled"
 
-            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27, linenew, line28, linenew, line29])
+            f.writelines([line1, linenew, line2, linenew, line3, linenew, line4, linenew, line5, linenew, line6, linenew, line7, linenew, line8, linenew, line9, linenew, line10, linenew, line11, linenew, line12, linenew, line13, linenew, line14, linenew, line15, linenew, line16, linenew, line17, linenew, line18, linenew, line19, linenew, line20, linenew, line21, linenew, line22, linenew, line23, linenew, line24, linenew, line25, linenew, line26, linenew, line27, linenew, line28, linenew, line29, linenew, line30, linenew, line31])
 
 def first_boot():
     sg.theme('darkbrown')   # Add a touch of color
