@@ -8,11 +8,47 @@ import tkinter.font
 import os
 import pygame
 import pyttsx3
+import sys
+
+# Import modules for sys info
+pathname = os.path.expanduser('~')
+sys.path.append(os.path.abspath(pathname) + "/pyArmClock/modules/")
+# Import MFW Lib General
+from mfw_lib_general import get_network_ip
+from mfw_lib_general import get_timestamp
+from mfw_lib_general import get_hostname
+from mfw_lib_general import get_osversion
+from mfw_lib_general import get_external_ip
+
+# Import MFW Status
+from mfw_lib_status import get_cpuload
+from mfw_lib_status import get_memfree
+from mfw_lib_status import get_memfreeGB
+from mfw_lib_status import get_memtotal
+from mfw_lib_status import get_uptime
+from mfw_lib_status import get_diskused
+from mfw_lib_status import get_disktotal
+from mfw_lib_status import get_diskpercent
+from mfw_lib_status import get_updatesavailable
 
 snooze_setting = 600
 Time_Period = ("AM", "PM")
 Hour = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 Min = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59)
+
+class System_Specs:
+
+    def __init__(self):
+        self.ipaddress = get_network_ip()
+        self.uptime = get_uptime()
+        self.os_version = get_osversion()
+        self.public_ip = get_external_ip()
+        self.cpu_load = get_cpuload()
+        self.memtotal = get_memtotal()
+        self.memfree_gb = get_memfreeGB()
+        self.disk_total = get_disktotal()
+        self.disk_used = get_diskused()
+        self.updates_available = get_updatesavailable()
 
 def now(Set_Format, timetype):
     if timetype == 'time':
@@ -661,7 +697,7 @@ def alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_
                 [sg.Push(), sg.Button('Manually Set Clock Time - (Manual config If Using Offline)'), sg.Push()],
                 [sg.Push(), sg.Button('Saved Alarms'), sg.Button('Choose Song'), sg.Button('Clock Format'), sg.Push()],
                 [sg.Push(), sg.Button(' Set Theme '), sg.Button('Clock Font'), sg.Button(' Snooze Duration '), sg.Push()],
-                [sg.Push(), sg.Button('Time Speak Settings'), sg.Push()],
+                [sg.Push(), sg.Button('Time Speak Settings'), sg.Button('System Info'), sg.Push()],
                 [sg.Push(), sg.Button('Ok'), sg.Push()],
                 [sg.VPush()]
                 
@@ -699,6 +735,10 @@ def alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_
             window.close()
             speak_settings(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fullscreen_mode)
 
+        if event == 'System Info':
+            window.Close()
+            sys_info(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fullscreen_mode)
+
         if event == 'Clock Format':
             window.close()
             clock_format(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
@@ -716,8 +756,39 @@ def alarm_options(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_
             make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Format, snooze_setting, fullscreen_mode)
             break
 
+def sys_info(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fullscreen_mode):
+    #Set Home
+    home_folder = os.path.expanduser('~')
+    pyArmClock = System_Specs()
+
+    sg.theme(theme)   # Add a touch of color
+    layout = [  [sg.VPush()],
+                [sg.Push(), sg.Text(f'Current IP address: {pyArmClock.ipaddress}'), sg.Push()],
+                [sg.Push(), sg.Text(f'Public IP: {pyArmClock.public_ip}'), sg.Push()],
+                [sg.Push(), sg.Text(f'Current Uptime: {pyArmClock.uptime}'), sg.Push()],
+                [sg.Push(), sg.Text(f'OS Version: {pyArmClock.os_version}'), sg.Push()],
+                [sg.Push(), sg.Text(f'CPU Load: {pyArmClock.cpu_load}'), sg.Push()],
+                [sg.Push(), sg.Text(f'Memory Total: {pyArmClock.memtotal}'), sg.Text(f'Memory Free: {pyArmClock.memfree_gb}'), sg.Push()],
+                [sg.Push(), sg.Text(f'Disk Total: {pyArmClock.disk_total}'), sg.Text(f'Disk Free: {pyArmClock.disk_used}'), sg.Push()],
+                [sg.Push(), sg.Text(f'Available OS Updates: {pyArmClock.updates_available}'), sg.Push()],
+                [sg.Push(), sg.OK(), sg.Push()],
+                [sg.VPush()]
+        ]
+        # Create the Window
+    window = sg.Window('pyArmClock', layout, element_justification='c', resizable=True)
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read(timeout=10,timeout_key='timeout')
+        if fullscreen_mode == True:
+            window.Maximize()
+            window.TKroot["cursor"] = "none"
+
+        if event == "OK" or event == sg.WIN_CLOSED: # if user closes window or clicks cancel
+            window.close()
+            main()
+
 def speak_settings(theme, cfont, song, alarm_set, set_alarm_timer, Set_Format, fullscreen_mode):
-    # Set Clock Format for 12 or 24 hour options
+    # Set vars for Speak Settings
     speak_options = ['Enabled', 'Disabled']
     volume_level = ['25%', '50%', '75%', '100%']
 
