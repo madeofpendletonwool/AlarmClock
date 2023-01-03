@@ -155,7 +155,7 @@ def Wake_Up(song, snooze_setting, Set_Format, theme, fullscreen_mode, cfont):
     layout = [  [sg.VPush()],
                 [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                 [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
-                [sg.Push(), sg.Button('Ok'), sg.Button('Snooze'), sg.Push()],
+                [sg.Push(), sg.Button('Ok', size=(20, 2)), sg.Button('Snooze', size=(20, 2)), sg.Push()],
                 [sg.Push(), sg.Text(f'Time to wake up!'), sg.Push()],
                 [sg.VPush()]
                 
@@ -543,7 +543,6 @@ def edit_alarm(edit_alarm_no, theme, fullscreen_mode):
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values1 = window.read()
-        print(fullscreen_mode)
 
         if event == 'Save':
             window.close()
@@ -865,7 +864,6 @@ def time_set(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Forma
             main()
 
         if event == 'Ok': # if user closes window or clicks cancel
-            print(values[1])
             if values[0] and values[1] and values[2]:
                 window.close()
                 break
@@ -1048,8 +1046,8 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
                 [sg.Push(), sg.Text('',key='date',font=(cfont,15),justification='center'), sg.Push()],
                 [sg.Push(), sg.Text('',key='clocktime',font=(cfont,60),justification='center'), sg.Push()],
                 [sg.Text('When would you like to wake up?'), sg.Text('Select Time:')],
-                [sg.Combo(Hour), sg.Combo(Min), sg.Combo(Time_Period), sg.Button('Ok')],
-                [sg.Button('Saved Alarm or Options')],
+                [sg.Combo(Hour, size=(7, 5)), sg.Combo(Min, size=(7, 5)), sg.Combo(Time_Period, size=(7, 25)), sg.Button('Ok')],
+                [sg.Button('Saved Alarm or Options', size=(20, 1))],
                 [sg.VPush()]
                 
             ]
@@ -1079,10 +1077,8 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
             main()
 
         if event == 'Ok': # if user closes window or clicks cancel
-            print(values[1])
             if values[1] == 0:
-                values[1] = 'zero'
-                print(values[1])  
+                values[1] = 'zero' 
 
             if values[0] and values[1] and values[2]:
                 window.close()
@@ -1148,7 +1144,6 @@ def make_window(theme, cfont, song, alarm_set, set_alarm_timer, set_time, Set_Fo
     else: hour_convfin = str(hour_conv)
     
     set_time = f'{hour_temp}:{min_conv} {time_section}'
-    print(set_time)
 
     current_time = time.localtime()
     if current_time.tm_sec < 10:

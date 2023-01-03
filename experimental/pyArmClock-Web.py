@@ -1,7 +1,4 @@
-import time
-import datetime
-import os
-import pyttsx3
+def greetings(name):
+    print(f'Hi, {name}')
 
-testvar = 'Hello this is a test!'
-print(testvar)
+greetings('John Doe')
